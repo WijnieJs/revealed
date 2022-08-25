@@ -2,6 +2,10 @@ package com.example.two.security.request;
 
 import javax.validation.constraints.NotBlank;
 
+// Doubted between adding theses into DTO map or separating it into one security map.
+// My conclusion is that a folder for everything security related makes it easier to get along
+// As a result we only need to add the auth middleware for us to work as facade anytime we need the user
+
 public class LoginRequest {
 	@NotBlank
 	private String username;
