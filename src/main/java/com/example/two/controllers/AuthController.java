@@ -16,7 +16,7 @@ import javax.validation.Valid;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/test")
+@RequestMapping("/api/auth")
 public class AuthController {
 
 
@@ -28,7 +28,7 @@ public class AuthController {
     AuthService authService;
 
 
-    @PostMapping("/all")
+    @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody SignupRequest signUpRequest) {
 
       ResponseDto user = authService.signUp(signUpRequest);

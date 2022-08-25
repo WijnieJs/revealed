@@ -1,12 +1,12 @@
 package com.example.two.security;
 
-<<<<<<< HEAD
+
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-=======
+
 import com.example.two.security.jwt.AuthEntryPointJwt;
 import com.example.two.security.jwt.AuthTokenFilter;
 import com.example.two.security.services.UserDetailsServiceImpl;
@@ -23,7 +23,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
->>>>>>> haveacopy
+
 
 @Configuration
 @EnableWebSecurity
@@ -32,13 +32,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
         // jsr250Enabled = true,
         prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-<<<<<<< HEAD
 
-
-
-
-
-=======
     @Autowired
     UserDetailsServiceImpl userDetailsService;
 
@@ -77,5 +71,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
->>>>>>> haveacopy
+
 }
