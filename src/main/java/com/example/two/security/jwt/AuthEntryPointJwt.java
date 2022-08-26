@@ -15,7 +15,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-// Passed  after exception handler , as parameter insert in AuthenticationEntryPoint.
+// Facade Pattern for entry in security config to keep it readable and flexible.
+// AddFilterBefore will throw it to the execption handler when there are no auth credentials
 //    makes check if client is not yet authenticated so that the AuthenticationEntryPoint will be used.
 // If client is authenticated but not authorized   throws accesdenied exception
 @Component

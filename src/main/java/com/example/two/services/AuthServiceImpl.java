@@ -97,7 +97,7 @@ public class AuthServiceImpl{
 		// Would call this a facade pattern and not a factory  because,
 		// It is not creating anything new, so its behaviour falls under structural patterns
 		//  has enum types for safety.
-		// The main reason why i did this is to make the signup method more readable.
+		// The main reason why i did this is to make the signup method more readable and learning about design patterns.
 
 		Set<Role> roles = new HashSet<>();
 		if (strRoles == null) {
