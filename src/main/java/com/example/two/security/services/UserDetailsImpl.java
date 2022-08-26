@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 
-// Builder pattern for building user info information
+// Builder Pattern too build user with details and roles.
 public class UserDetailsImpl implements UserDetails {
 	private static final long serialVersionUID = 1L;
 

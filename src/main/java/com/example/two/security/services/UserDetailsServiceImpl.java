@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-//Adapter Pattern to make the service compatible with the builder
+//Object Adapter implementation for the interfaces too work
+// with the spring-security userdetails & authenticationManagerBuilder.
+// Static call too the userbuilder and returns the immutable userObject.
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
   @Autowired

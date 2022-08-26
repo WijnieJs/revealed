@@ -15,6 +15,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+// Passed  after exception handler , as parameter insert in AuthenticationEntryPoint.
+// Facade design pattern..
+//    makes check if client is not authenticated so that the AuthenticationEntryPoint will be used.
+// If client is authenticated but not authorized   throws accesdenied exception
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 

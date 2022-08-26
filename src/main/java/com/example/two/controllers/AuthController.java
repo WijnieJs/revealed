@@ -6,7 +6,7 @@ import com.example.two.security.request.LoginRequest;
 import com.example.two.security.request.SignupRequest;
 import com.example.two.security.response.JwtResponse;
 import com.example.two.security.response.MessageResponse;
-import com.example.two.services.AuthService;
+import com.example.two.services.AuthServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,13 +25,13 @@ public class AuthController {
     UserRepository userRepository;
 
     @Autowired
-    AuthService authService;
+    AuthServiceImpl authServiceImpl;
 
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody SignupRequest signUpRequest) {
 
-      ResponseDto user = authService.signUp(signUpRequest);
+      ResponseDto user = authServiceImpl.signUp(signUpRequest);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 
@@ -39,7 +39,7 @@ public class AuthController {
     }
     @PostMapping("/signin")
     public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-            return authService.authenticateUser(loginRequest);
+            return authServiceImpl.authenticateUser(loginRequest);
     }
 
 
