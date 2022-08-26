@@ -13,30 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/user")
 public class UserController {
 
-
-
-
-
-    @GetMapping("/all")
-    public String allAccess() {
-        return "Public Caaaaaontent.";
-    }
-
-    @GetMapping("/user")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @GetMapping("/user")
     public String userAccess() {
         return "User Content.";
     }
 
-    @GetMapping("/mod")
-    @PreAuthorize("hasRole('MODERATOR')")
-    public String moderatorAccess() {
-        return "Moderator Board.";
-    }
 
-    @GetMapping("/admin")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String adminAccess() {
-        return "Admin Board.";
-    }
+//    @GetMapping("/mod")
+//    @PreAuthorize("hasRole('MODERATOR')")
+//    public String moderatorAccess() {
+//        return "Moderator Board.";
+//    }
+
+
 }

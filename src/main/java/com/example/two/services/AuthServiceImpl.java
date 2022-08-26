@@ -72,31 +72,10 @@ public class AuthServiceImpl{
 		return new ResponseDto("Successfully created", "think ");
 	}
 
-	public ResponseEntity<JwtResponse> authenticateUser(LoginRequest loginRequest) {
-
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = jwtUtils.generateJwtToken(authentication);
-
-		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-		List<String> roles = userDetails.getAuthorities().stream()
-				.map(item -> item.getAuthority())
-				.collect(Collectors.toList());
-
-		return ResponseEntity.ok(new JwtResponse(jwt,
-				userDetails.getId(),
-				userDetails.getUsername(),
-				userDetails.getEmail(),
-				roles));
-
-	}
-
 	public Set<Role> buildFacadeForUserRolesSwitchStatement(Set<String> strRoles) {
 		// Would call this a facade pattern and not a factory  because,
 		// It is not creating anything new, so its behaviour falls under structural patterns
-		//  has enum types for safety.
+		//  has enum types for safety the method returns a ResponseDto. The role model stays isolated so i did not make a roledto
 		// The main reason why i did this is to make the signup method more readable and learning about design patterns.
 
 		Set<Role> roles = new HashSet<>();
@@ -124,5 +103,29 @@ public class AuthServiceImpl{
 		}
 		return roles;
 	}
+
+
+	public ResponseEntity<JwtResponse> authenticateUser(LoginRequest loginRequest) {
+
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		String jwt = jwtUtils.generateJwtToken(authentication);
+
+		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+		List<String> roles = userDetails.getAuthorities().stream()
+				.map(item -> item.getAuthority())
+				.collect(Collectors.toList());
+
+		return ResponseEntity.ok(new JwtResponse(jwt,
+				userDetails.getId(),
+				userDetails.getUsername(),
+				userDetails.getEmail(),
+				roles));
+
+	}
+
+
 
 }

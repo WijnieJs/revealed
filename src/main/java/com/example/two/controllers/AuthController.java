@@ -31,6 +31,11 @@ public class AuthController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
+    @GetMapping("/all")
+    public String allAccess() {
+        return "Public Caaaaaontent.";
+    }
+
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@Valid @RequestBody SignupRequest signUpRequest, BindingResult result) {
 
@@ -39,8 +44,6 @@ public class AuthController {
 
       ResponseDto user = authServiceImpl.signUp(signUpRequest);
             return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-
-
 
 
     }

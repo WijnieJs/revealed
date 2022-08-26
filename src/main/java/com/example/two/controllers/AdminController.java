@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/admin/auth")
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR') ")
 public class AdminController {
 
     @GetMapping("/all")
@@ -18,10 +18,7 @@ public class AdminController {
                 "Admin mode";
     }
 
-    @GetMapping("/user")
-    public String userAccess() {
-        return "User Content.";
-    }
+
 
     @GetMapping("/mod")
     public String moderatorAccess() {
@@ -31,9 +28,10 @@ public class AdminController {
 
     // ROUTES ONLY FOR ADMIN AUTHORITY
 
-
     @GetMapping("/admin")
+    @PreAuthorize("hasRole('ADMIN')")
     public String adminAccess() {
         return "Admin Board.";
     }
+
 }

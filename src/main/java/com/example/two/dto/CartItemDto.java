@@ -25,7 +25,7 @@ public class CartItemDto {
         return "CartDto{" +
                 "id=" + id +
                 ", quantity=" + quantity +
-                ", productName=" + product.getName() +
+                ", productName=" + product.getTitle() +
                 '}';
     }
 
