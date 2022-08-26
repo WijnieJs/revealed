@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+//Adapter Pattern to make the service compatible with the builder
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
   @Autowired
