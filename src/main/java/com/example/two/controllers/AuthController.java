@@ -7,8 +7,10 @@ import com.example.two.security.request.SignupRequest;
 import com.example.two.security.response.JwtResponse;
 import com.example.two.security.response.MessageResponse;
 import com.example.two.services.AuthServiceImpl;
+import com.example.two.services.MapValidationErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,20 +22,25 @@ import javax.validation.Valid;
 public class AuthController {
 
 
-
     @Autowired
     UserRepository userRepository;
 
     @Autowired
     AuthServiceImpl authServiceImpl;
 
+    @Autowired
+    private MapValidationErrorService mapValidationErrorService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@RequestBody SignupRequest signUpRequest) {
+    public ResponseEntity<?> signUp(@Valid @RequestBody SignupRequest signUpRequest, BindingResult result) {
+
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if (errorMap != null) return errorMap;
 
       ResponseDto user = authServiceImpl.signUp(signUpRequest);
+            return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+
 
 
     }

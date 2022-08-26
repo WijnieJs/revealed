@@ -16,18 +16,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 // Passed  after exception handler , as parameter insert in AuthenticationEntryPoint.
-// Facade design pattern..
-//    makes check if client is not authenticated so that the AuthenticationEntryPoint will be used.
+//    makes check if client is not yet authenticated so that the AuthenticationEntryPoint will be used.
 // If client is authenticated but not authorized   throws accesdenied exception
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthEntryPointJwt.class);
+//    private static final Logger logger = LoggerFactory.getLogger(AuthEntryPointJwt.class);
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
             throws IOException, ServletException {
-        logger.error("Unauthorized error: {}", authException.getMessage());
+//        logger.error("Unauthorized error: {}", authException.getMessage());
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

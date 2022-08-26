@@ -21,6 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 
 import java.util.HashSet;
 import java.util.List;
@@ -28,7 +29,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class AuthServiceImpl {
+public class AuthServiceImpl{
 
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -45,12 +46,14 @@ public class AuthServiceImpl {
 	@Autowired
 	JwtUtils jwtUtils;
 
+
 	public ResponseDto signUp(SignupRequest signUpRequest) {
-		String errorMessage  = "User with this identity has been found";
+		String errorMessage  = "User with this email has been found";
 		try {
 			if(Helper.notNull(userRepository.findByEmail(signUpRequest.getEmail()))) {
 				throw new ProjectNotFoundException("User  already exists");
 			}
+
 			//		// Create new user's account
 			User user = new User(signUpRequest.getUsername(),
 					signUpRequest.getEmail(),
@@ -120,4 +123,6 @@ public class AuthServiceImpl {
 			});
 		}
 		return roles;
-	}}
+	}
+
+}
