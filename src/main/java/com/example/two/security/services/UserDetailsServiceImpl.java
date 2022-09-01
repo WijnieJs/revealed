@@ -12,12 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 //Object Adapter implementation for the interfaces too work
 // with the spring-security userdetails & authenticationManagerBuilder.
-// Static call too the userbuilder and returns the immutable userObject.
+// Static call too the userbuilder and returns the  userObject.
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
   @Autowired
   UserRepository userRepository;
 
+  //UserDetailsService interface has one method we now override too customize our userdetails obj.
   @Override
   @Transactional
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

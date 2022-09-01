@@ -21,7 +21,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 
 import java.util.HashSet;
 import java.util.List;
@@ -29,7 +28,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class AuthServiceImpl{
+public class AuthServiceImpl implements AuthService {
 
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -47,10 +46,11 @@ public class AuthServiceImpl{
 	JwtUtils jwtUtils;
 
 
-	public ResponseDto signUp(SignupRequest signUpRequest) {
-		String errorMessage  = "User with this email has been found";
+	@Override
+	public ResponseDto register(SignupRequest signUpRequest) {
+		String errorMessage = "User with this email has been found";
 		try {
-			if(Helper.notNull(userRepository.findByEmail(signUpRequest.getEmail()))) {
+			if (Helper.notNull(userRepository.findByEmail(signUpRequest.getEmail()))) {
 				throw new ProjectNotFoundException("User  already exists");
 			}
 
@@ -70,12 +70,36 @@ public class AuthServiceImpl{
 		}
 
 		return new ResponseDto("Successfully created", "think ");
+
 	}
+
+	@Override
+	public ResponseEntity<JwtResponse> getAuthentication(LoginRequest loginRequest) {
+
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		String jwt = jwtUtils.generateJwtToken(authentication);
+
+		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+		List<String> roles = userDetails.getAuthorities().stream()
+				.map(item -> item.getAuthority())
+				.collect(Collectors.toList());
+
+		return ResponseEntity.ok(new JwtResponse(jwt,
+				userDetails.getId(),
+				userDetails.getUsername(),
+				userDetails.getEmail(),
+				roles));
+
+	}
+
 
 	public Set<Role> buildFacadeForUserRolesSwitchStatement(Set<String> strRoles) {
 		// Would call this a facade pattern and not a factory  because,
 		// It is not creating anything new, so its behaviour falls under structural patterns
-		//  has enum types for safety the method returns a ResponseDto. The role model stays isolated so i did not make a roledto
+		//  has enum types for safety and calling dot notation, the method returns a ResponseDto. The role model stays isolated so i did not make a roledto
 		// The main reason why i did this is to make the signup method more readable and learning about design patterns.
 
 		Set<Role> roles = new HashSet<>();
@@ -103,29 +127,6 @@ public class AuthServiceImpl{
 		}
 		return roles;
 	}
-
-
-	public ResponseEntity<JwtResponse> authenticateUser(LoginRequest loginRequest) {
-
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = jwtUtils.generateJwtToken(authentication);
-
-		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-		List<String> roles = userDetails.getAuthorities().stream()
-				.map(item -> item.getAuthority())
-				.collect(Collectors.toList());
-
-		return ResponseEntity.ok(new JwtResponse(jwt,
-				userDetails.getId(),
-				userDetails.getUsername(),
-				userDetails.getEmail(),
-				roles));
-
-	}
-
-
-
 }
+
+

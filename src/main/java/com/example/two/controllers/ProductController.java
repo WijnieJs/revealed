@@ -1,17 +1,14 @@
 package com.example.two.controllers;
 
 
-import com.example.two.models.Product;
-import com.example.two.repository.ProductRepository;
+import com.example.two.dto.ProductDto;
+
+import com.example.two.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -19,20 +16,45 @@ import java.util.List;
 @RequestMapping("/api/shop")
 public class ProductController {
 
-
     @Autowired
-    ProductRepository productRepository;
+    ProductService productService;
 
-    @GetMapping("/products")
-    public ResponseEntity<List<Product>> getAllProducts()  {
-        List<Product> products = new ArrayList<Product>();
-        productRepository.findAll().forEach(products::add);
+    @GetMapping("/test")
+    public String allAccess() {
+        return
+                "accesing in visitor mode";
+    }
 
 
-        if (products.isEmpty()) {
+
+
+    @GetMapping("/product")
+    public ResponseEntity<List<ProductDto>> getAllProducts()  {
+        List<ProductDto> body = productService.findAllProducts();
+        if (body.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(products, HttpStatus.OK);
+        return new ResponseEntity<List<ProductDto>>(body, HttpStatus.OK);
+    }
+
+
+
+
+    @GetMapping("/productById/{id}")
+    public ResponseEntity<ProductDto> getProductById(@PathVariable("id") long id)  {
+        ProductDto product = productService.findProductById(id);
+        return new ResponseEntity<>(product, HttpStatus.OK);
 
     }
+
+//    @GetMapping("/tags")
+//    public ResponseEntity<List<Tag>> findTagsByPrdId()  {
+//        List<Tag> tags = new ArrayList<>(productServiceImpl.getTagsByAll());
+//
+//        if (tags.isEmpty()) {
+//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//        }
+//        return new ResponseEntity<>(tags, HttpStatus.OK);
+//
+//    }
 }

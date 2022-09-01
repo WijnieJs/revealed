@@ -40,6 +40,7 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
         final ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getOutputStream(), body);
+// Objmapper writeValue to serialize pojo as JSON calling geOutputStream to write the data from socket to the destination
 
 //    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error: Unauthorized");
     }

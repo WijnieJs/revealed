@@ -35,12 +35,19 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
-                // This will return a call to the build method in userdetailimpl, and return the immutable user
+                // This will return a call to the build method in userdetailimpl, build the user and convert roles to
+                // authorities
 
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
                         userDetails.getAuthorities());
+                // UsernamePasswordAuthenticationToken is an extension of the AbstractAuthenticationToken class,
+                // When the method receives the [granted ] authority Collections
+                // will call the constructor of parent class, to set authentication
+
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+//      WebAuthenticationDetailsSource  builds the details object from an HttpServletRequest,
+// Creating and returning a new WebAuthenticationDetails
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }

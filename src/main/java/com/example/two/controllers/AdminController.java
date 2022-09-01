@@ -12,13 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR') ")
 public class AdminController {
 
-    @GetMapping("/all")
-    public String allAccess() {
-        return
-                "Admin mode";
-    }
-
-
 
     @GetMapping("/mod")
     public String moderatorAccess() {

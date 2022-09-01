@@ -2,12 +2,16 @@ package com.example.two.dto;
 
 
 import com.example.two.models.Product;
+import com.example.two.models.Tag;
 
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class ProductDto {
 
-    private Integer id;
+    private Long id;
     private @NotNull String title;
     private String imageURL;
     private @NotNull double price;
@@ -15,15 +19,23 @@ public class ProductDto {
     private @NotNull String description;
 
 
+    private Set<Tag> tags = new HashSet<>();
+
     public ProductDto(Product product) {
-
+        this.setId(product.getId());
+        this.setTitle(product.getTitle());
         this.setImageURL(product.getImageURL());
-        this.setDescription(product.getDescription());
         this.setPrice(product.getPrice());
-
+        this.setPublished(product.isPublished());
+        this.setDescription(product.getDescription());
+        this.setTags(product.getTags());
     }
 
-    public ProductDto(@NotNull String title, @NotNull String imageURL, @NotNull double price, @NotNull String description ) {
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public ProductDto(@NotNull String title, @NotNull String imageURL, @NotNull double price, @NotNull String description, Map tags ) {
         this.title = title;
         this.imageURL = imageURL;
         this.price = price;
@@ -34,11 +46,11 @@ public class ProductDto {
     public ProductDto() {
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
