@@ -21,7 +21,7 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
 
 
-    public List<ProductDto> findAllProducts() {
+    public List<ProductDto> fetchAllUser() {
             try {
                 List<Product> products = productRepository.findAll();
                 List<ProductDto> dtos = new ArrayList<>();
@@ -36,16 +36,16 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
-    @Override
-    public ProductDto findProductById(long id) {
-        try {
-            Product product = productRepository.findById(id).get();
-            return transferToDto(product);
-        } catch (Exception e ) {
-            throw new ProjectNotFoundException("Product not in this shop ");
-        }
-
-    }
+//    @Override
+//    public ProductDto findProductById(long id) {
+//        try {
+//            Product product = productRepository.findById(id).get();
+//            return transferToDto(product);
+//        } catch (Exception e ) {
+//            throw new ProjectNotFoundException("Product not in this shop ");
+//        }
+//
+//    }
 
     public ProductDto transferToDto(Product product) {
         ProductDto productDto = new ProductDto();
@@ -56,6 +56,12 @@ public class ProductServiceImpl implements ProductService {
         productDto.setDescription(product.getDescription());
         return productDto;
     }
+
+//    @Override
+//    public List<ProductDto> fetchAllUser() {
+//        return null;
+//    }
+
 
 //    @Override
 //    public ProductDto findProductById(Long productId) {

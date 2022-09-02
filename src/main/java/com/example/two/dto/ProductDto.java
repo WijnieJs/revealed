@@ -31,6 +31,13 @@ public class ProductDto {
         this.setTags(product.getTags());
     }
 
+    public ProductDto(String title, String description, boolean published, double price) {
+        this.title = title;
+        this.description = description;
+        this.published = published;
+        this.price = price;
+    }
+
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
     }

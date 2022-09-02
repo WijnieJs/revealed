@@ -10,10 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+//@RequestMapping("/api/shop")
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/shop")
 public class ProductController {
 
     @Autowired
@@ -30,7 +30,7 @@ public class ProductController {
 
     @GetMapping("/product")
     public ResponseEntity<List<ProductDto>> getAllProducts()  {
-        List<ProductDto> body = productService.findAllProducts();
+        List<ProductDto> body = productService.fetchAllUser();
         if (body.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -40,12 +40,12 @@ public class ProductController {
 
 
 
-    @GetMapping("/productById/{id}")
-    public ResponseEntity<ProductDto> getProductById(@PathVariable("id") long id)  {
-        ProductDto product = productService.findProductById(id);
-        return new ResponseEntity<>(product, HttpStatus.OK);
-
-    }
+//    @GetMapping("/productById/{id}")
+//    public ResponseEntity<ProductDto> getProductById(@PathVariable("id") long id)  {
+//        ProductDto product = productService.findProductById(id);
+//        return new ResponseEntity<>(product, HttpStatus.OK);
+//
+//    }
 
 //    @GetMapping("/tags")
 //    public ResponseEntity<List<Tag>> findTagsByPrdId()  {

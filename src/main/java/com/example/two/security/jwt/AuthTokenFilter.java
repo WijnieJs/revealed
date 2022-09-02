@@ -25,8 +25,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
-//    private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -41,13 +39,22 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
                         userDetails.getAuthorities());
-                // UsernamePasswordAuthenticationToken is an extension of the AbstractAuthenticationToken class,
-                // When the method receives the [granted ] authority Collections
-                // will call the constructor of parent class, to set authentication
+
+ // UsernamePasswordAuthenticationToken , will write it from here as AuthU , is a subclass of AbstractAuthenticationToken
+// the AuthU has 2 Constructors and ,2 static  methods with UsernamePasswordAuthenticationToken(),
+// The successfull  constructor needs to be called with   3parameters.
+// The static method will be called with  super.setAuthenticated(true) hard coded in, and calls super(autoritries)
+// In the parent the authenticated boolean switches too true.
+ // In the class we iterate over authorities and set them as a unmodifiableList collection.
+  // The class has a method wich can evaluate the InstanceOf getUserPrincipal(), which will
+ //wich will either be UserDetails ,, AuthenticatedPrincipal , Principal returning the getName
+
+
 
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-//      WebAuthenticationDetailsSource  builds the details object from an HttpServletRequest,
-// Creating and returning a new WebAuthenticationDetails
+//    WebAuthenticationDetailsSource implements AuthenticationDetailsSource, were / when buildDetails() is called
+// wich will build details object from HttpServletRequest creating a new WebAuthenticationDetails
+
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }

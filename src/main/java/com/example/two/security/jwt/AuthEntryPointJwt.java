@@ -16,8 +16,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 // Facade Pattern for entry in security config to keep it readable and flexible.
-// AddFilterBefore will throw it to the execption handler when there are no auth credentials
-//    makes check if client is not yet authenticated so that the AuthenticationEntryPoint will be used.
+// AddFilterBefore will throw it to the execption handler,
+//   Facade  checks/confirms if client did not provide his credentials so AuthenticationEntryPoint will be used.
 // If client is authenticated but not authorized   throws accesdenied exception
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
@@ -30,19 +30,23 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 //        logger.error("Unauthorized error: {}", authException.getMessage());
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);  // << Statuscode 401, Authentication required>> //
 
         final Map<String, Object> body = new HashMap<>();
         body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
         body.put("error", "Unauthorized");
         body.put("message", authException.getMessage());
+
+ //getServletPath(),gives servletname or path to servlet
+ // Or  an  empty string when the request  path contains "/*"
+
         body.put("path", request.getServletPath());
 
         final ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getOutputStream(), body);
-// Objmapper writeValue to serialize pojo as JSON calling geOutputStream to write the data from socket to the destination
+// geOutputStream  writing the data a binary in the  response;
 
-//    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error: Unauthorized");
+    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error: Unauthorized");
     }
 
 }

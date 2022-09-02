@@ -2,6 +2,7 @@ package com.example.two.services;
 
 import com.example.two.dto.ResponseDto;
 import com.example.two.exceptions.ProjectNotFoundException;
+import com.example.two.exceptions.UserIdException;
 import com.example.two.models.ERole;
 import com.example.two.models.Role;
 import com.example.two.models.User;
@@ -65,7 +66,7 @@ public class AuthServiceImpl implements AuthService {
 			userRepository.save(user);
 
 		} catch (Exception e) {
-			throw new ProjectNotFoundException(errorMessage);
+			throw new UserIdException(errorMessage);
 
 		}
 

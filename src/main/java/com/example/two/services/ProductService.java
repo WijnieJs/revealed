@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface ProductService {
 
-    List<ProductDto> findAllProducts();
+    List<ProductDto> fetchAllUser();
 
-    ProductDto findProductById(long id);
+//    ProductDto findProductById(long id);
 //    ProductDto findProductById(Long productId);
 //    List<Tag> findTagsByTutorialsId();
 
