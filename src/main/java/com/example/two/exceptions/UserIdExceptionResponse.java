@@ -4,19 +4,27 @@ package com.example.two.exceptions;
 
 public class UserIdExceptionResponse {
 
-    private String UserNotFound;
+    private String UserErrorFound;
 
-    public UserIdExceptionResponse(String userNotFound) {
-        UserNotFound = userNotFound;
+    public UserIdExceptionResponse(String userExceptionErr) {
+        UserErrorFound = userExceptionErr;
     }
 
-    public String getUserNotFoundException() {
-        return UserNotFound;
+    public String getUserErrorFound() {
+        return UserErrorFound;
     }
 
-    public void setUserNotFoundException(String userNotFound) {
-        this.UserNotFound = userNotFound;
+    public void setUserErrorFound(String userErrorFound) {
+        UserErrorFound = userErrorFound;
     }
+
+//    public String getUserNotFoundException() {
+//        return UserErrorFound;
+//    }
+//
+//    public void setUserNotFoundException(String userExceptionErr) {
+//        this.UserErrorFound = userExceptionErr;
+//    }
 
     //    public UserIdExceptionResponse(String userIdException) {
 //        this.userIdException = userIdException;

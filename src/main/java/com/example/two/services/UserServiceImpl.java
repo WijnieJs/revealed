@@ -1,7 +1,6 @@
 package com.example.two.services;
 
 import com.example.two.dto.ResponseDto;
-import com.example.two.exceptions.ProjectNotFoundException;
 import com.example.two.exceptions.UserIdException;
 import com.example.two.models.ERole;
 import com.example.two.models.Role;
@@ -29,7 +28,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class AuthServiceImpl implements AuthService {
+public class UserServiceImpl implements UserService {
 
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -49,13 +48,17 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	public ResponseDto register(SignupRequest signUpRequest) {
-		String errorMessage = "User with this email has been found";
+		String errorMessage = "User with this email already exists";
 		try {
 			if (Helper.notNull(userRepository.findByEmail(signUpRequest.getEmail()))) {
-				throw new ProjectNotFoundException("User  already exists");
+				throw new UserIdException(errorMessage);
+			}
+			errorMessage = "User with this username already exists";
+			if(userExistsDb(signUpRequest.getUsername())) {
+				throw new UserIdException(errorMessage);
 			}
 
-			//		// Create new user's account
+
 			User user = new User(signUpRequest.getUsername(),
 					signUpRequest.getEmail(),
 					encoder.encode(signUpRequest.getPassword()));
@@ -73,6 +76,12 @@ public class AuthServiceImpl implements AuthService {
 		return new ResponseDto("Successfully created", "think ");
 
 	}
+
+	public boolean userExistsDb(String username) {
+		return userRepository.findByUsername(username).isPresent();
+	}
+
+
 
 	@Override
 	public ResponseEntity<JwtResponse> getAuthentication(LoginRequest loginRequest) {
@@ -97,10 +106,13 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 
+
+
 	public Set<Role> buildFacadeForUserRolesSwitchStatement(Set<String> strRoles) {
 		// Would call this a facade pattern and not a factory  because,
 		// It is not creating anything new, so its behaviour falls under structural patterns
-		//  has enum types for safety and calling dot notation, the method returns a ResponseDto. The role model stays isolated so i did not make a roledto
+		//  Enums for type safety and easy acces in switch statement with by  dot notation,
+		//  the method returns a ResponseDto. The role model stays isolated so i did not make a roledto
 		// The main reason why i did this is to make the signup method more readable and learning about design patterns.
 
 		Set<Role> roles = new HashSet<>();
@@ -128,6 +140,8 @@ public class AuthServiceImpl implements AuthService {
 		}
 		return roles;
 	}
+
+
 }
 
 

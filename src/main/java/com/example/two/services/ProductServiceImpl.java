@@ -2,7 +2,10 @@ package com.example.two.services;
 
 
 import com.example.two.dto.ProductDto;
-import com.example.two.exceptions.ProjectNotFoundException;
+
+import com.example.two.exceptions.ApiRequestException;
+import com.example.two.exceptions.ProductNotFoundException;
+import com.example.two.exceptions.UserIdException;
 import com.example.two.models.Product;
 import com.example.two.repository.ProductRepository;
 
@@ -20,32 +23,85 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    public ProductServiceImpl(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
-    public List<ProductDto> fetchAllUser() {
+
+    @Override
+    public List<ProductDto> fetchAllProductsInShop() {
+        try {
+            List<Product> products = productRepository.findAll();
+            List<ProductDto> dtos = new ArrayList<>();
+            for (Product product : products) {
+                ProductDto productDto = transferToDto(product);
+                dtos.add(productDto);
+            }
+            return dtos;
+        } catch(Exception e) {
+            throw new ProductNotFoundException("Something is wrong on the connection. ");
+        }
+    }
+
+    @Override
+    public ProductDto findProductById(Long id) {
+
+            Product product =  productRepository.findById(id)
+                    .orElseThrow(() -> new ApiRequestException("Could not find product with id " + id));
+
+            return transferToDto(product);
+
+    }
+
+    @Override
+    public ProductDto editProduct(Long id, ProductDto productDto) {
+
+        Product product =  productRepository.findById(id)
+                .orElseThrow(() -> new ApiRequestException("Could not find product with id " + id));
             try {
-                List<Product> products = productRepository.findAll();
-                List<ProductDto> dtos = new ArrayList<>();
-                 for (Product product : products) {
-                    ProductDto productDto = transferToDto(product);
-                    dtos.add(productDto);
-                }
-                return dtos;
+
+                product.setTitle(productDto.getTitle());
+//                product.setDescription(productDto.getDescription());
+//                product.setPrice(productDto.getPrice());
+//                product.setPublished(productDto.isPublished());
+//                product.setImageURL(productDto.getImageURL());
+//
+//                productRepository.save(product);
+            System.out.println(productDto.getTitle() + " IN   hereree" );
+
+                return transferToDto(product);
             } catch(Exception e) {
-            throw new ProjectNotFoundException("Something is wrong ");
+                throw new ProductNotFoundException("Something went wrong saving . ");
             }
 
     }
 
-//    @Override
-//    public ProductDto findProductById(long id) {
-//        try {
-//            Product product = productRepository.findById(id).get();
-//            return transferToDto(product);
-//        } catch (Exception e ) {
-//            throw new ProjectNotFoundException("Product not in this shop ");
-//        }
-//
-//    }
+
+    @Override
+    public ProductDto addNewProduct(ProductDto productDto) {
+            try {
+        Product product = transferToProduct(productDto);
+
+
+            productRepository.save(product);
+            return transferToDto(product);
+
+            } catch(Exception e) {
+                throw new ProductNotFoundException("Something is with this product ");
+
+            }
+
+    }
+
+    public Product transferToProduct(ProductDto dto) {
+            var newProduct = new Product();
+            newProduct.setTitle(dto.getTitle());
+            newProduct.setDescription(dto.getDescription());
+            newProduct.setPublished(dto.isPublished());
+            newProduct.setPrice(dto.getPrice());
+
+            return newProduct;
+    }
 
     public ProductDto transferToDto(Product product) {
         ProductDto productDto = new ProductDto();
@@ -56,49 +112,6 @@ public class ProductServiceImpl implements ProductService {
         productDto.setDescription(product.getDescription());
         return productDto;
     }
-
-//    @Override
-//    public List<ProductDto> fetchAllUser() {
-//        return null;
-//    }
-
-
-//    @Override
-//    public ProductDto findProductById(Long productId) {
-//
-//        try {
-////
-//           return getDtoFromProduct(productRepository.findById(productId).get()) ;
-//
-//        } catch(Exception e) {
-//            throw new ProjectNotFoundException("No product found with this id ");
-//
-//        }
-//
-//    }
-//
-//
-//
-//    public static ProductDto getDtoFromProduct(Product product) {
-//        ProductDto productDto = new ProductDto(product);
-//
-//        return productDto;
-//    }
-
-
-
-
-//        public List<Product> getProducts() {
-//            return productRepository.findProductsByTagsId(2L);
-//        }
-
-
-//    @Override
-//    public List<Product> findProductsByTagsId(Long tagId) {
-//
-//        return  productService.getAll(2L);
-//    }
-
 
 
 }

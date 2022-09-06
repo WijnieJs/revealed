@@ -1,12 +1,13 @@
 package com.example.two.controllers;
 
 import com.example.two.dto.ResponseDto;
+
 import com.example.two.repository.UserRepository;
 import com.example.two.security.request.LoginRequest;
 import com.example.two.security.request.SignupRequest;
 import com.example.two.security.response.JwtResponse;
 import com.example.two.security.response.MessageResponse;
-import com.example.two.services.AuthService;
+import com.example.two.services.UserService;
 import com.example.two.utils.MapValidationErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +24,7 @@ public class AuthController {
 
 
     @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    AuthService authService;
+    UserService userService;
 
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
@@ -38,19 +36,18 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@Valid @RequestBody SignupRequest signUpRequest, BindingResult result) {
-
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
 
-      ResponseDto user = authService.register(signUpRequest);
-            return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        ResponseDto user = userService.register(signUpRequest);
+        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 
 
     }
     @PostMapping("/signin")
     public ResponseEntity<JwtResponse> authlogin(@Valid @RequestBody LoginRequest loginRequest) {
 
-             return authService.getAuthentication(loginRequest);
+             return userService.getAuthentication(loginRequest);
     }
 
 

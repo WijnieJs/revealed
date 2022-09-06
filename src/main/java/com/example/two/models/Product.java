@@ -14,15 +14,17 @@ public class Product {
     private long id;
 
     @Column(name = "title")
-    private String title;
+    private  String title;
 
     @Column(name = "description")
-    private String description;
+    private  String description;
 
     @Column(name = "published")
     private boolean published;
 
-    private @NotNull double price;
+    private  double price;
+
+    @Column(name = "image_url")
     private  String imageURL;
 
     @ManyToMany(fetch = FetchType.LAZY,
@@ -35,6 +37,7 @@ public class Product {
             inverseJoinColumns = { @JoinColumn(name = "tag_id") })
     private Set<Tag> tags = new HashSet<>();
 
+
     public Product() {
 
     }
@@ -44,6 +47,10 @@ public class Product {
         this.description = description;
         this.published = published;
         this.price = price;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public long getId() {

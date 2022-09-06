@@ -13,7 +13,10 @@ import org.springframework.http.ResponseEntity;
 // Using Dependency injection to acces the auth anywere ,
 // the facade allows for the authObj , while it can hide the static state.
 
-public interface AuthService {
+public interface UserService {
     ResponseDto register(SignupRequest signUpRequest);
     ResponseEntity<JwtResponse> getAuthentication(LoginRequest loginRequest);
+
+//    Boolean existsByUsername(String username);
+//    Boolean existsByEmail(String email);
 }

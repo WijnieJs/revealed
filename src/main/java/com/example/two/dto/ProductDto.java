@@ -4,7 +4,9 @@ package com.example.two.dto;
 import com.example.two.models.Product;
 import com.example.two.models.Tag;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -12,28 +14,18 @@ import java.util.Set;
 public class ProductDto {
 
     private Long id;
-    private @NotNull String title;
+    private  String title;
     private String imageURL;
-    private @NotNull double price;
+    private  double price;
     private boolean published;
-    private @NotNull String description;
+    private  String description;
 
 
     private Set<Tag> tags = new HashSet<>();
 
-    public ProductDto(Product product) {
-        this.setId(product.getId());
-        this.setTitle(product.getTitle());
-        this.setImageURL(product.getImageURL());
-        this.setPrice(product.getPrice());
-        this.setPublished(product.isPublished());
-        this.setDescription(product.getDescription());
-        this.setTags(product.getTags());
-    }
 
-    public ProductDto(String title, String description, boolean published, double price) {
-        this.title = title;
-        this.description = description;
+    public ProductDto(  String imageURL,  String description,  boolean published,  double price) {
+        this.imageURL = imageURL;
         this.published = published;
         this.price = price;
     }
@@ -42,12 +34,11 @@ public class ProductDto {
         this.tags = tags;
     }
 
-    public ProductDto(@NotNull String title, @NotNull String imageURL, @NotNull double price, @NotNull String description, Map tags ) {
+    public ProductDto( String title,  double price,  String description, boolean published, Map tags ) {
         this.title = title;
-        this.imageURL = imageURL;
         this.price = price;
         this.description = description;
-
+        this.published = published;
     }
 
     public ProductDto() {
