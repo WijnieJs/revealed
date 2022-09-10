@@ -1,17 +1,20 @@
 package com.example.two.dto;
 
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 
 public class ProductDto {
 
     private int id;
-    private  String title;
+    private @NotNull String title;
     private String imageURL;
     private  double price;
     private boolean published;
-    private  String description;
+    @Size(min = 2, message = "Description should have at least 2 characters")
+    private @NotNull String descriptionDt;
 
 
     private List<String> tags;
@@ -19,13 +22,13 @@ public class ProductDto {
     public ProductDto() {
     }
 
-    public ProductDto(int id, String title, String imageURL, double price, boolean published, String description, List<String> tags) {
+    public ProductDto(int id, @NotNull String title, String imageURL, double price, boolean published, @NotNull String description, List<String> tags) {
         this.id = id;
         this.title = title;
         this.imageURL = imageURL;
         this.price = price;
         this.published = published;
-        this.description = description;
+        this.descriptionDt = description;
         this.tags = tags;
     }
 
@@ -61,12 +64,12 @@ public class ProductDto {
         this.price = price;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDescriptionDt() {
+        return descriptionDt;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.descriptionDt= description;
     }
 
     public int getId() {

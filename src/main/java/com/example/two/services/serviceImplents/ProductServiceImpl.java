@@ -3,6 +3,7 @@ package com.example.two.services.serviceImplents;
 
 import com.example.two.dto.ProductDto;
 
+import com.example.two.dto.converters.DtoMapperService;
 import com.example.two.exceptions.ApiRequestException;
 import com.example.two.exceptions.ProductNotFoundException;
 import com.example.two.models.Product;
@@ -12,8 +13,10 @@ import com.example.two.services.serviceInterfaces.ProductService;
 import com.example.two.utils.Helper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,28 +25,21 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
 
+    private DtoMapperService dtoHandler;
+    private final ProductRepository productRepository;
+
 
     @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
-    private ModelMapper modelMapper;
-
-    public ProductServiceImpl(ProductRepository productRepository) {
+    public ProductServiceImpl(DtoMapperService dtoMapHandlerr, ProductRepository productRepository) {
+        this.dtoHandler = dtoMapHandlerr;
         this.productRepository = productRepository;
     }
-
 
     @Override
     public List<ProductDto> fetchAllProductsInShop() {
         try {
             List<Product> products = productRepository.findAll();
-            List<ProductDto> dtos = new ArrayList<>();
-            for (Product product : products) {
-                ProductDto productDto = transferToDto(product);
-                dtos.add(productDto);
-            }
-            return dtos;
+          return dtoHandler.dtoConverter(products, ProductDto.class);
         } catch(Exception e) {
             throw new ProductNotFoundException("Something is wrong on the connection. ");
         }
@@ -51,29 +47,45 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto findProductById(Integer id) {
-
             Product product =  productRepository.findById(id)
                     .orElseThrow(() -> new ApiRequestException("Could not find product with id " + id));
 
-            return transferToDto(product);
+         return (ProductDto) dtoHandler.dtoClassConverter(product, ProductDto.class);
+
 
     }
 
     @Override
-    public ProductDto editProduct(int id, ProductDto dto) {
+    public ProductDto addNewProduct(ProductDto productDto) {
+//        Product product = transferToProduct(productDto);
+//          save
+//        return transferToDto(product);
 
-//        Product productInDb =  productRepository.findById(id);
-////                .orElseThrow(() -> new ApiRequestException("Could not find product with id " + id));
+        try {
+            Product newProduct = (Product) dtoHandler.dtoClassConverter(productDto, Product.class);
+
+            productRepository.save(newProduct);
+            return (ProductDto) dtoHandler.dtoClassConverter(newProduct, ProductDto.class);
+        }  catch (ProductNotFoundException e) {
+            throw new ProductNotFoundException("Something went wrong on the server ");
+        }
+
+
+    }
+
+
+    @Override
+    public ProductDto editProduct(ProductDto productDto)   {
+
                try {
-//
-//                productInDb.setTitle(dto.getTitle());
-//                productInDb.setDescription(dto.getDescription());
-//                productInDb.setPublished(dto.isPublished());
-//                productInDb.setPrice(dto.getPrice());
-////
-////                productRepository.save(product);
+            this.productRepository.save((Product)
+                    dtoHandler.dtoClassConverter(productDto, Product.class));
 
-                return dto;
+            return productDto;
+//                   Product productinDb = (Product) dtoHandler.dtoClassConverter(productDto, Product.class);
+//                   productRepository.save(productinDb);
+//                   return (ProductDto) dtoHandler.dtoClassConverter(productinDb, ProductDto.class);
+
 //                return transferToDto(dto);
             } catch(Exception e) {
                 throw new ProductNotFoundException("Something went wrong saving . ");
@@ -81,45 +93,31 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
-
     @Override
-    public ProductDto addNewProduct(ProductDto productDto) {
-            try {
+    public List<Product> getAllProductsByTitle(String title) {
 
-//                if(Helper.notNull(productRepository.getProductByTitle(productDto.getTitle()))) {
-//                    throw new ProductNotFoundException("Product with this title already exists");
-//                }
-
-//                   Product product = productRepository.save(transferToProduct(productDto));
-
-                    return productDto;
-//                    return transferToDto(product);
-            } catch(Exception e) {
-                throw new ProductNotFoundException("Something is with this product ");
-
-            }
+        try {
+            List<Product> products = productRepository.findAllProductsByTitle(title);
+            return products;
+        } catch (Exception e) {
+            throw new ProductNotFoundException("No product with this name was found ");
+        }
 
     }
 
-//    public Product transferToProduct(ProductDto dto) {
-//            var newProduct = new Product();
-//            newProduct.setTitle(dto.getTitle());
-//            newProduct.setDescription(dto.getDescription());
-//            newProduct.setPublished(dto.isPublished());
-//            newProduct.setPrice(dto.getPrice());
+
+//    private Product transferToProduct(ProductDto dto) {
+//        Product entity = modelMapper.map(dto, Product.class);
 //
-//            return newProduct;
+//        return entity;
 //    }
+//private ProductDto transferToDto(Product product) {
+//        ProductDto dto = modelMapper.map(product, ProductDto.class);
+//        return dto;
+//}
 
-    private Product transferToProduct(ProductDto dto) {
-        Product entity = modelMapper.map(dto, Product.class);
 
-        return entity;
-    }
-private ProductDto transferToDto(Product product) {
-        ProductDto dto = modelMapper.map(product, ProductDto.class);
-        return dto;
-}
+/// Leaving these here as reference since this was the style of the homework assignments
 //    public ProductDto transferToDto(Product product) {
 //        ProductDto productDto = new ProductDto();
 //        productDto.setId(product.getId());
@@ -130,6 +128,14 @@ private ProductDto transferToDto(Product product) {
 //        return productDto;
 //    }
 
-
+//    public Product transferToProduct(ProductDto dto) {
+//            var newProduct = new Product();
+//            newProduct.setTitle(dto.getTitle());
+//            newProduct.setDescription(dto.getDescription());
+//            newProduct.setPublished(dto.isPublished());
+//            newProduct.setPrice(dto.getPrice());
+//
+//            return newProduct;
+//    }
 }
 

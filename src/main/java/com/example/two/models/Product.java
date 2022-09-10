@@ -1,7 +1,9 @@
 package com.example.two.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,11 +15,13 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "title")
-    private  String title;
 
+    @Column(name = "title")
+    private @NotNull String title;
+
+    @Size(min = 2, message = "Description should have at least 2 characters")
     @Column(name = "description")
-    private  String description;
+    private @NotNull  String description;
 
     @Column(name = "published")
     private boolean published;
