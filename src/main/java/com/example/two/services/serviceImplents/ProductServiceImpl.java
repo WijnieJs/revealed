@@ -3,9 +3,11 @@ package com.example.two.services.serviceImplents;
 
 import com.example.two.dto.ProductDto;
 
+import com.example.two.dto.ResponseDto;
 import com.example.two.dto.converters.DtoMapperService;
 import com.example.two.exceptions.ApiRequestException;
 import com.example.two.exceptions.ProductNotFoundException;
+import com.example.two.exceptions.UserIdException;
 import com.example.two.models.Product;
 import com.example.two.repository.ProductRepository;
 
@@ -75,16 +77,32 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public ProductDto editProduct(ProductDto productDto)   {
-
+    public ResponseDto editProduct(ProductDto productDto)   {
+        int id = productDto.getId();
                try {
-            this.productRepository.save((Product)
-                    dtoHandler.dtoClassConverter(productDto, Product.class));
+                Product productInDb = productRepository.findById(id)
+                        .orElseThrow(() -> new ProductNotFoundException("Product not found"));
 
-            return productDto;
-//                   Product productinDb = (Product) dtoHandler.dtoClassConverter(productDto, Product.class);
-//                   productRepository.save(productinDb);
+                   if (Helper.notNull(productDto.getTitle())) {
+                       productInDb.setTitle(productDto.getTitle());
+                   }
+                   if (Helper.notNull(productDto.getDescription())) {
+                       productInDb.setDescription(productDto.getDescription());
+                   }
+                   if (Helper.notNull(productDto.getImageURL())) {
+                       productInDb.setImageURL(productDto.getImageURL());
+                   }
+
+                            productInDb.setPublished(productDto.isPublished());
+
+
+
+
+
+                       productRepository.save(productInDb);
+
 //                   return (ProductDto) dtoHandler.dtoClassConverter(productinDb, ProductDto.class);
+                   return new ResponseDto("Successfully created", "think ");
 
 //                return transferToDto(dto);
             } catch(Exception e) {

@@ -1,6 +1,7 @@
 package com.example.two.services.serviceInterfaces;
 
 import com.example.two.dto.ProductDto;
+import com.example.two.dto.ResponseDto;
 import com.example.two.models.Product;
 
 
@@ -10,7 +11,7 @@ public interface ProductService {
 
     ProductDto addNewProduct(ProductDto productDto);
     List<ProductDto> fetchAllProductsInShop();
-    ProductDto findProductById(Integer id);
-    ProductDto editProduct(ProductDto productDto);
+    ProductDto findProductById(Integer productId);
+    ResponseDto editProduct(ProductDto productDto);
     List<Product> getAllProductsByTitle(String title);
 }

@@ -13,8 +13,7 @@ public class ProductDto {
     private String imageURL;
     private  double price;
     private boolean published;
-    @Size(min = 2, message = "Description should have at least 2 characters")
-    private @NotNull String descriptionDt;
+     private  String description;
 
 
     private List<String> tags;
@@ -22,13 +21,13 @@ public class ProductDto {
     public ProductDto() {
     }
 
-    public ProductDto(int id, @NotNull String title, String imageURL, double price, boolean published, @NotNull String description, List<String> tags) {
+    public ProductDto(int id, @NotNull String title, String imageURL, double price, boolean published, String description, List<String> tags) {
         this.id = id;
         this.title = title;
         this.imageURL = imageURL;
         this.price = price;
         this.published = published;
-        this.descriptionDt = description;
+        this.description = description;
         this.tags = tags;
     }
 
@@ -64,12 +63,12 @@ public class ProductDto {
         this.price = price;
     }
 
-    public String getDescriptionDt() {
-        return descriptionDt;
+    public String getDescription() {
+        return description;
     }
 
     public void setDescription(String description) {
-        this.descriptionDt= description;
+        this.description= description;
     }
 
     public int getId() {
@@ -87,4 +86,6 @@ public class ProductDto {
     public void setTags(List<String> tags) {
         this.tags = tags;
     }
+
+
 }

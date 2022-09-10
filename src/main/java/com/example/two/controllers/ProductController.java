@@ -3,6 +3,7 @@ package com.example.two.controllers;
 
 import com.example.two.dto.ProductDto;
 
+import com.example.two.dto.ResponseDto;
 import com.example.two.models.Product;
 import com.example.two.security.response.MessageResponse;
 import com.example.two.services.serviceInterfaces.ProductService;
@@ -49,12 +50,12 @@ public class ProductController {
           return ResponseEntity.ok(new MessageResponse("Product " + newProduct.getTitle() + "created successfully!"));
 
     }
-    @PutMapping("/editProduct")
-    public ResponseEntity<ProductDto> editProduct(@Valid @RequestBody ProductDto productDto) {
+    @PatchMapping("/editProduct")
+    public ResponseEntity<?> editProduct(@Valid @RequestBody ProductDto productDto) {
 
-        ProductDto editProduct = productService.editProduct( productDto);
+        ResponseDto editProduct = productService.editProduct( productDto);
 
-        return new ResponseEntity<>(editProduct, HttpStatus.OK);
+        return ResponseEntity.ok(new MessageResponse("Product created successfully!"));
 
 
     }
