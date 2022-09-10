@@ -1,4 +1,4 @@
-package com.example.two.services;
+package com.example.two.services.serviceImplents;
 
 import com.example.two.dto.ResponseDto;
 import com.example.two.exceptions.UserIdException;
@@ -12,6 +12,7 @@ import com.example.two.security.request.LoginRequest;
 import com.example.two.security.request.SignupRequest;
 import com.example.two.security.response.JwtResponse;
 import com.example.two.security.services.UserDetailsImpl;
+import com.example.two.services.serviceInterfaces.UserService;
 import com.example.two.utils.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

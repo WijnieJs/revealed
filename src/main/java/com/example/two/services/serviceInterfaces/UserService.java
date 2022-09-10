@@ -1,4 +1,4 @@
-package com.example.two.services;
+package com.example.two.services.serviceInterfaces;
 
 import com.example.two.dto.ResponseDto;
 import com.example.two.security.request.LoginRequest;

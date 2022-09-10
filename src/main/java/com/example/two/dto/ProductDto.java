@@ -1,19 +1,12 @@
 package com.example.two.dto;
 
 
-import com.example.two.models.Product;
-import com.example.two.models.Tag;
+import java.util.List;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 public class ProductDto {
 
-    private Long id;
+    private int id;
     private  String title;
     private String imageURL;
     private  double price;
@@ -21,35 +14,19 @@ public class ProductDto {
     private  String description;
 
 
-    private Set<Tag> tags = new HashSet<>();
-
-
-    public ProductDto(  String imageURL,  String description,  boolean published,  double price) {
-        this.imageURL = imageURL;
-        this.published = published;
-        this.price = price;
-    }
-
-    public void setTags(Set<Tag> tags) {
-        this.tags = tags;
-    }
-
-    public ProductDto( String title,  double price,  String description, boolean published, Map tags ) {
-        this.title = title;
-        this.price = price;
-        this.description = description;
-        this.published = published;
-    }
+    private List<String> tags;
 
     public ProductDto() {
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
+    public ProductDto(int id, String title, String imageURL, double price, boolean published, String description, List<String> tags) {
         this.id = id;
+        this.title = title;
+        this.imageURL = imageURL;
+        this.price = price;
+        this.published = published;
+        this.description = description;
+        this.tags = tags;
     }
 
     public String getTitle() {
@@ -92,5 +69,19 @@ public class ProductDto {
         this.description = description;
     }
 
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
 }

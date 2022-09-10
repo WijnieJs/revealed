@@ -4,7 +4,7 @@ package com.example.two.controllers;
 import com.example.two.dto.ProductDto;
 
 import com.example.two.security.response.MessageResponse;
-import com.example.two.services.ProductService;
+import com.example.two.services.serviceInterfaces.ProductService;
 import com.example.two.utils.MapValidationErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -57,13 +57,13 @@ public class ProductController {
 
 
     @GetMapping("/productById/{id}")
-    public ResponseEntity<ProductDto> getProductById(@PathVariable("id") long id)  {
+    public ResponseEntity<ProductDto> getProductById(@PathVariable("id") int id)  {
         ProductDto product = productService.findProductById(id);
         return new ResponseEntity<>(product, HttpStatus.OK);
 
     }
     @PutMapping("/productEdit/{id}")
-    public ResponseEntity<ProductDto> editProduct(@PathVariable("id") long id, @Valid @RequestBody ProductDto productDto) {
+    public ResponseEntity<ProductDto> editProduct(@PathVariable("id") int id, @Valid @RequestBody ProductDto productDto) {
         ProductDto editProduct = productService.editProduct(id, productDto);
 
         return new ResponseEntity<>(editProduct, HttpStatus.OK);

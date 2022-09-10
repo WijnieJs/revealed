@@ -1,14 +1,15 @@
-package com.example.two.services;
+package com.example.two.services.serviceImplents;
 
 
 import com.example.two.dto.ProductDto;
 
 import com.example.two.exceptions.ApiRequestException;
 import com.example.two.exceptions.ProductNotFoundException;
-import com.example.two.exceptions.UserIdException;
 import com.example.two.models.Product;
 import com.example.two.repository.ProductRepository;
 
+import com.example.two.services.serviceInterfaces.ProductService;
+import com.example.two.utils.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto findProductById(Long id) {
+    public ProductDto findProductById(Integer id) {
 
             Product product =  productRepository.findById(id)
                     .orElseThrow(() -> new ApiRequestException("Could not find product with id " + id));
@@ -54,22 +55,21 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto editProduct(Long id, ProductDto productDto) {
+    public ProductDto editProduct(int id, ProductDto dto) {
 
-        Product product =  productRepository.findById(id)
-                .orElseThrow(() -> new ApiRequestException("Could not find product with id " + id));
-            try {
-
-                product.setTitle(productDto.getTitle());
-//                product.setDescription(productDto.getDescription());
-//                product.setPrice(productDto.getPrice());
-//                product.setPublished(productDto.isPublished());
-//                product.setImageURL(productDto.getImageURL());
+//        Product productInDb =  productRepository.findById(id);
+////                .orElseThrow(() -> new ApiRequestException("Could not find product with id " + id));
+               try {
 //
-//                productRepository.save(product);
-            System.out.println(productDto.getTitle() + " IN   hereree" );
+//                productInDb.setTitle(dto.getTitle());
+//                productInDb.setDescription(dto.getDescription());
+//                productInDb.setPublished(dto.isPublished());
+//                productInDb.setPrice(dto.getPrice());
+////
+////                productRepository.save(product);
 
-                return transferToDto(product);
+                return dto;
+//                return transferToDto(dto);
             } catch(Exception e) {
                 throw new ProductNotFoundException("Something went wrong saving . ");
             }
@@ -80,12 +80,15 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto addNewProduct(ProductDto productDto) {
             try {
-        Product product = transferToProduct(productDto);
 
+//                if(Helper.notNull(productRepository.getProductByTitle(productDto.getTitle()))) {
+//                    throw new ProductNotFoundException("Product with this title already exists");
+//                }
 
-            productRepository.save(product);
-            return transferToDto(product);
+//                   Product product = productRepository.save(transferToProduct(productDto));
 
+                    return productDto;
+//                    return transferToDto(product);
             } catch(Exception e) {
                 throw new ProductNotFoundException("Something is with this product ");
 

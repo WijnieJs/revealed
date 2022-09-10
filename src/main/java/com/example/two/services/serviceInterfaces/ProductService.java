@@ -1,4 +1,4 @@
-package com.example.two.services;
+package com.example.two.services.serviceInterfaces;
 
 import com.example.two.dto.ProductDto;
 
@@ -12,7 +12,7 @@ public interface ProductService {
 
     List<ProductDto> fetchAllProductsInShop();
 
-    ProductDto findProductById(Long id);
+    ProductDto findProductById(Integer id);
 
-    ProductDto editProduct(Long id, ProductDto productDto);
+    ProductDto editProduct(int id, ProductDto productDto);
 }
