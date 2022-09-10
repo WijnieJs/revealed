@@ -10,6 +10,7 @@ import com.example.two.repository.ProductRepository;
 
 import com.example.two.services.serviceInterfaces.ProductService;
 import com.example.two.utils.Helper;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +22,12 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
 
+
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     public ProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
@@ -96,25 +101,34 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
-    public Product transferToProduct(ProductDto dto) {
-            var newProduct = new Product();
-            newProduct.setTitle(dto.getTitle());
-            newProduct.setDescription(dto.getDescription());
-            newProduct.setPublished(dto.isPublished());
-            newProduct.setPrice(dto.getPrice());
+//    public Product transferToProduct(ProductDto dto) {
+//            var newProduct = new Product();
+//            newProduct.setTitle(dto.getTitle());
+//            newProduct.setDescription(dto.getDescription());
+//            newProduct.setPublished(dto.isPublished());
+//            newProduct.setPrice(dto.getPrice());
+//
+//            return newProduct;
+//    }
 
-            return newProduct;
-    }
+    private Product transferToProduct(ProductDto dto) {
+        Product entity = modelMapper.map(dto, Product.class);
 
-    public ProductDto transferToDto(Product product) {
-        ProductDto productDto = new ProductDto();
-        productDto.setId(product.getId());
-        productDto.setTitle(product.getTitle());
-        productDto.setPrice(product.getPrice());
-        productDto.setPublished(product.isPublished());
-        productDto.setDescription(product.getDescription());
-        return productDto;
+        return entity;
     }
+private ProductDto transferToDto(Product product) {
+        ProductDto dto = modelMapper.map(product, ProductDto.class);
+        return dto;
+}
+//    public ProductDto transferToDto(Product product) {
+//        ProductDto productDto = new ProductDto();
+//        productDto.setId(product.getId());
+//        productDto.setTitle(product.getTitle());
+//        productDto.setPrice(product.getPrice());
+//        productDto.setPublished(product.isPublished());
+//        productDto.setDescription(product.getDescription());
+//        return productDto;
+//    }
 
 
 }
