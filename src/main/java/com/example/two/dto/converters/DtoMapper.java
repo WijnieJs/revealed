@@ -1,11 +1,14 @@
 package com.example.two.dto.converters;
 
 
+import com.example.two.dto.ProductDto;
+import com.example.two.models.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service

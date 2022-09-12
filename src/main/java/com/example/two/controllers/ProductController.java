@@ -64,7 +64,7 @@ public class ProductController {
     public ResponseEntity<List<ProductDto>> getAllProducts()  {
 
 
-        List<ProductDto> body = productService.fetchAllProductsInShop();
+        List<ProductDto> body = productService.fetchAll();
         if (body.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

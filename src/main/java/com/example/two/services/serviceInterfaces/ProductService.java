@@ -10,7 +10,7 @@ import java.util.List;
 public interface ProductService {
 
     ProductDto addNewProduct(ProductDto productDto);
-    List<ProductDto> fetchAllProductsInShop();
+    List<ProductDto> fetchAll();
     ProductDto findProductById(Integer productId);
     ResponseDto editProduct(ProductDto productDto);
     List<Product> getAllProductsByTitle(String title);

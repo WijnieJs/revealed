@@ -5,6 +5,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -39,7 +40,8 @@ public class Product {
     @JoinTable(name = "product_tags",
             joinColumns = { @JoinColumn(name = "product_id") },
             inverseJoinColumns = { @JoinColumn(name = "tag_id") })
-    private Set<Tag> tags = new HashSet<>();
+        List<Tag> tags;
+//    private Set<Tag> tags = new HashSet<>();
 
 
     public Product() {
@@ -101,13 +103,22 @@ public class Product {
         this.published = isPublished;
     }
 
-    public Set<Tag> getTags() {
-        return tags;
-    }
+//    public Set<Tag> getTags() {
+//        return tags;
+//    }
+//
+//    public void setTags(Set<Tag> tags) {
+//        this.tags = tags;
+//    }
+public List<Tag> getTags() {
+    return tags;
+}
 
-    public void setTags(Set<Tag> tags) {
+    public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
+
+
 
     public void addTag(Tag tag) {
         this.tags.add(tag);
