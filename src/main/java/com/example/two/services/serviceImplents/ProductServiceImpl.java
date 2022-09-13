@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
 
 
-    private DtoMapperService dtoHandler;
+    private final DtoMapperService dtoHandler;
     private final ProductRepository productRepository;
     private ModelMapper modelMapper;
 
