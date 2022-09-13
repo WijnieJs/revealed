@@ -36,7 +36,7 @@ public class ProductController {
         return
                 "accesing in visitor mode";
     }
-
+/// set
 
     @PostMapping("/newproduct")
     public ResponseEntity<?> createNewProduct(@Valid  @RequestBody ProductDto productDto, BindingResult result) {
