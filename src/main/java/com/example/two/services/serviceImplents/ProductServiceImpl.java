@@ -11,16 +11,13 @@ import com.example.two.exceptions.ApiRequestException;
 import com.example.two.exceptions.ProductNotFoundException;
 import com.example.two.models.Product;
 import com.example.two.repository.ProductRepository;
-import com.sun.xml.bind.v2.schemagen.episode.SchemaBindings;
 import org.modelmapper.ModelMapper;
 
 import com.example.two.services.serviceInterfaces.ProductService;
 import com.example.two.utils.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,11 +55,17 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new ApiRequestException("Could not find product with id " + id));
 //extract into method for better resusability
         ProductDto dtoObj = (ProductDto) dtoHandler.dtoClassConverter(product, ProductDto.class);
-        dtoObj.setTags(product.getTags().stream().map(TagToDto::of).collect(Collectors.toList()));
+//        dtoObj.setTags(product.getTags().stream().map(TagToDto::of).collect(Collectors.toList()));
+             dtoObj.setTags(addTagsToProduct( product));
 
         return dtoObj;
     }
 
+
+    public List<String> addTagsToProduct(Product product) {
+        return product.getTags().stream().map(TagToDto::of).collect(Collectors.toList());
+
+    }
     @Override
     public ProductDto addNewProduct(ProductDto productDto) {
         // also works, but for readability kept them seperated
