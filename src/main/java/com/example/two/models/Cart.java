@@ -1,9 +1,13 @@
 package com.example.two.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name="cart")
@@ -11,41 +15,25 @@ public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @JsonProperty
+    @Column
+    private Long id;
 
+    @ManyToMany
+    @JsonProperty
+    @Column
+    private List<Product> items;
 
-
-    @Column(name = "created_date")
-    private Date createdDate;
-
-    @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Product product;
-
-    @JsonIgnore
-    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "user_id")
+    @OneToOne(mappedBy = "cart")
+    @JsonProperty
     private User user;
 
+    @Column
+    @JsonProperty
+    private BigDecimal total;
 
-    private int quantity;
-
-    public Cart() {
-    }
-
-    public Cart(Product product, int quantity, User user){
-        this.user = user;
-        this.product = product;
-        this.quantity = quantity;
-        this.createdDate = new Date();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+    public void setTotal(BigDecimal total) {
+        this.total = total;
     }
 
     public User getUser() {
@@ -56,27 +44,41 @@ public class Cart {
         this.user = user;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
+    public Long getId() {
+        return id;
     }
 
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Product getProduct() {
-        return product;
+    public List<Product> getItems() {
+        return items;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setItems(List<Product> items) {
+        this.items = items;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public void addItem(Product item) {
+        if(items == null) {
+            items = new ArrayList<>();
+        }
+        items.add(item);
+        if(total == null) {
+            total = new BigDecimal(0);
+        }
+        total = total.add(item.getPrice());
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void removeItem(Product item) {
+        if(items == null) {
+            items = new ArrayList<>();
+        }
+        items.remove(item);
+        if(total == null) {
+            total = new BigDecimal(0);
+        }
+        total = total.subtract(item.getPrice());
     }
 }

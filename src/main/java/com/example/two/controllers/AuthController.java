@@ -2,6 +2,7 @@ package com.example.two.controllers;
 
 import com.example.two.dto.ResponseDto;
 
+import com.example.two.models.User;
 import com.example.two.security.request.LoginRequest;
 import com.example.two.security.request.SignupRequest;
 import com.example.two.security.response.JwtResponse;
@@ -9,6 +10,7 @@ import com.example.two.security.response.MessageResponse;
 import com.example.two.services.serviceInterfaces.UserService;
 import com.example.two.utils.MapValidationErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +34,9 @@ public class AuthController {
     public String allAccess() {
         return "Public Caaaaaontent.";
     }
+
+
+
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@Valid @RequestBody SignupRequest signUpRequest, BindingResult result) {

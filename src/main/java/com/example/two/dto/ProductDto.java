@@ -3,6 +3,7 @@ package com.example.two.dto;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -11,25 +12,14 @@ public class ProductDto {
     private int id;
     private @NotNull String title;
     private String imageURL;
-    private  double price;
+    private BigDecimal price;
     private boolean published;
      private  String description;
 
 
     private List<String> tags;
 
-    public ProductDto() {
-    }
 
-    public ProductDto(int id, @NotNull String title, String imageURL, double price, boolean published, String description, List<String> tags) {
-        this.id = id;
-        this.title = title;
-        this.imageURL = imageURL;
-        this.price = price;
-        this.published = published;
-        this.description = description;
-        this.tags = tags;
-    }
 
     public String getTitle() {
         return title;
@@ -55,11 +45,11 @@ public class ProductDto {
         this.imageURL = imageURL;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

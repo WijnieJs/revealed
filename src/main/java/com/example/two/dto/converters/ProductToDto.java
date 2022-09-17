@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
+
+// Not used anymore left it here for reference for teacher to see my prior methods of handling the mapper.\
+// See ProductServiceImpl class at line 183 and below for the legacy implementation
+
 public class ProductToDto {
 
     private static DtoMapperService dtoHandler;

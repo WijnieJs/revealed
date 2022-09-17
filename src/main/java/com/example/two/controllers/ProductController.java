@@ -15,9 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import java.util.List;
-import java.util.Optional;
 //@RequestMapping("/api/shop")
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -80,28 +78,23 @@ public class ProductController {
     }
 
 
-    @GetMapping("/getProductsByTitle")
-    public ResponseEntity<List<Product>> getAllProducts(@RequestParam(value = "title", required = false) Optional<String> title)  {
 
+    @GetMapping("/getByTag/{tagName}")
+    public ResponseEntity<List<ProductDto>> getProductByTag(@PathVariable("tagName") String tagName)  {
 
-        List<Product> body = productService.getAllProductsByTitle(title.get());
-//        if (body.isEmpty()) {
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//        }
-        return new ResponseEntity<List<Product>>(body, HttpStatus.OK);
+        List<ProductDto> product = productService.fetchProductsByTag(tagName);
+        return ResponseEntity.ok().body(product);
+
     }
 
+    @GetMapping("/getByTitle/{title}")
+    public ResponseEntity<ProductDto> getProductByTitle(@PathVariable("title") String title)  {
 
 
+         ProductDto product = productService.fetchProductByTitle(title);
 
-//    @GetMapping("/tags")
-//    public ResponseEntity<List<Tag>> findTagsByPrdId()  {
-//        List<Tag> tags = new ArrayList<>(productServiceImpl.getTagsByAll());
-//
-//        if (tags.isEmpty()) {
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//        }
-//        return new ResponseEntity<>(tags, HttpStatus.OK);
-//
-//    }
+
+        return ResponseEntity.ok().body(product);
+    }
+
 }

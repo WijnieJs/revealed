@@ -1,10 +1,10 @@
 package com.example.two.services.serviceImplents;
 
 import com.example.two.dto.ResponseDto;
+import com.example.two.exceptions.ApiRequestException;
 import com.example.two.exceptions.UserIdException;
-import com.example.two.models.ERole;
-import com.example.two.models.Role;
-import com.example.two.models.User;
+import com.example.two.models.*;
+import com.example.two.repository.ShopRepository;
 import com.example.two.repository.RoleRepository;
 import com.example.two.repository.UserRepository;
 import com.example.two.security.jwt.JwtUtils;
@@ -12,6 +12,7 @@ import com.example.two.security.request.LoginRequest;
 import com.example.two.security.request.SignupRequest;
 import com.example.two.security.response.JwtResponse;
 import com.example.two.security.services.UserDetailsImpl;
+import com.example.two.security.services.UserDetailsServiceImpl;
 import com.example.two.services.serviceInterfaces.UserService;
 import com.example.two.utils.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,19 +33,38 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	AuthenticationManager authenticationManager;
-
-	@Autowired
-	UserRepository userRepository;
-
-	@Autowired
-	RoleRepository roleRepository;
-
-	@Autowired
-	PasswordEncoder encoder;
+	private final AuthenticationManager authenticationManager;
 
 	@Autowired
 	JwtUtils jwtUtils;
+
+	@Autowired
+	private final RoleRepository roleRepository;
+
+	@Autowired
+	private final ShopRepository shopRepository;
+
+	@Autowired
+	private final PasswordEncoder encoder;
+	@Autowired
+	private final UserRepository userRepository;
+
+	@Autowired
+	private final UserDetailsServiceImpl userDetailsService;
+
+	public UserServiceImpl(AuthenticationManager authenticationManager,
+						   RoleRepository roleRepository,
+						   ShopRepository shopRepository,
+						   PasswordEncoder encoder,
+						   UserRepository userRepository, UserDetailsServiceImpl userDetailsService) {
+
+		this.authenticationManager = authenticationManager;
+		this.roleRepository = roleRepository;
+		this.shopRepository = shopRepository;
+		this.encoder = encoder;
+		this.userRepository = userRepository;
+		this.userDetailsService = userDetailsService;
+	}
 
 
 	@Override
@@ -66,6 +86,10 @@ public class UserServiceImpl implements UserService {
 
 			Set<String> strRoles = signUpRequest.getRole();
 			user.setRoles(buildFacadeForUserRolesSwitchStatement(strRoles));
+
+			Cart cart = new Cart();
+			shopRepository.save(cart);
+			user.setCart(cart);
 
 			userRepository.save(user);
 
@@ -106,6 +130,17 @@ public class UserServiceImpl implements UserService {
 
 	}
 
+
+
+	@Override
+	public User findByUsername(String username) {
+
+
+			User user = userRepository.findByUsername(username)
+					.orElseThrow(() -> new ApiRequestException("Could not find user with id " ));
+
+			return user;
+	}
 
 
 

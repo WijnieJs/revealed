@@ -1,12 +1,10 @@
 package com.example.two.models;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -27,7 +25,7 @@ public class Product {
     @Column(name = "published")
     private boolean published;
 
-    private  double price;
+    private BigDecimal price;
 
     @Column(name = "image_url")
     private  String imageURL;
@@ -44,16 +42,7 @@ public class Product {
 //    private Set<Tag> tags = new HashSet<>();
 
 
-    public Product() {
 
-    }
-
-    public Product(String title, String description, boolean published, double price) {
-        this.title = title;
-        this.description = description;
-        this.published = published;
-        this.price = price;
-    }
 
     public int getId() {
         return id;
@@ -79,11 +68,11 @@ public class Product {
         this.description = description;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -103,13 +92,7 @@ public class Product {
         this.published = isPublished;
     }
 
-//    public Set<Tag> getTags() {
-//        return tags;
-//    }
-//
-//    public void setTags(Set<Tag> tags) {
-//        this.tags = tags;
-//    }
+
 public List<Tag> getTags() {
     return tags;
 }

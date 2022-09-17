@@ -5,19 +5,19 @@ import com.example.two.dto.ProductDto;
 
 import com.example.two.dto.ResponseDto;
 import com.example.two.dto.converters.DtoMapperService;
-import com.example.two.dto.converters.ProductToDto;
 import com.example.two.dto.converters.TagToDto;
 import com.example.two.exceptions.ApiRequestException;
 import com.example.two.exceptions.ProductNotFoundException;
 import com.example.two.models.Product;
 import com.example.two.repository.ProductRepository;
-import org.modelmapper.ModelMapper;
+import com.example.two.services.serviceInterfaces.TagService;
 
 import com.example.two.services.serviceInterfaces.ProductService;
 import com.example.two.utils.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,21 +28,41 @@ public class ProductServiceImpl implements ProductService {
 
     private final DtoMapperService dtoHandler;
     private final ProductRepository productRepository;
-    private ModelMapper modelMapper;
+    private final TagService tagService;
 
     @Autowired
-    public ProductServiceImpl(DtoMapperService dtoMapHandlerr, ProductRepository productRepository) {
+    public ProductServiceImpl(DtoMapperService dtoMapHandlerr, ProductRepository productRepository, TagService tagService) {
         this.dtoHandler = dtoMapHandlerr;
         this.productRepository = productRepository;
+        this.tagService = tagService;
     }
 
     @Override
     public List<ProductDto> fetchAll() {
         try {
-            List<Product> product = productRepository.findAll();
-            return ProductToDto.of(product);
+
+            List<Product> productInDb = productRepository.findAll();
+            return getAllProductsToDto();
 
 //            return dtoHandler.dtoConverter(products, ProductDto.class);
+        } catch (Exception e) {
+            throw new ProductNotFoundException("Something is wrong on the connection. ");
+        }
+    }
+
+    public List<ProductDto> getAllProductsToDto() {
+        try {
+            List<Product> productInDb = productRepository.findAll();
+            List<ProductDto> dtos = new ArrayList<>();
+
+            for (Product product : productInDb) {
+                ProductDto dtoObj = (ProductDto) dtoHandler.dtoClassConverter(product, ProductDto.class);
+                dtoObj.setTags(addTagsToProduct(product));
+                dtos.add(dtoObj);
+            }
+//            return ProductToDto.of(product);/
+
+            return dtos;
         } catch (Exception e) {
             throw new ProductNotFoundException("Something is wrong on the connection. ");
         }
@@ -53,19 +73,17 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto findProductById(Integer id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ApiRequestException("Could not find product with id " + id));
-//extract into method for better resusability
         ProductDto dtoObj = (ProductDto) dtoHandler.dtoClassConverter(product, ProductDto.class);
-//        dtoObj.setTags(product.getTags().stream().map(TagToDto::of).collect(Collectors.toList()));
-             dtoObj.setTags(addTagsToProduct( product));
+        dtoObj.setTags(addTagsToProduct(product));
 
         return dtoObj;
     }
-
 
     public List<String> addTagsToProduct(Product product) {
         return product.getTags().stream().map(TagToDto::of).collect(Collectors.toList());
 
     }
+
     @Override
     public ProductDto addNewProduct(ProductDto productDto) {
         // also works, but for readability kept them seperated
@@ -97,6 +115,48 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    @Override
+    public List<ProductDto> fetchProductsByTag(String tagName) {
+        String errorMessage = "No Product with this tag name was found";
+
+        try {
+            List<ProductDto> productsFoundByTag = new ArrayList<>();
+
+            for (ProductDto productsWithTag : getAllProductsToDto()) {
+                for (String tagInProduct : productsWithTag.getTags()) {
+                    if (productWithTagFound(tagName, tagInProduct)) {
+                        productsFoundByTag.add(productsWithTag);
+
+                    }
+                }
+            }
+            return productsFoundByTag;
+        } catch (ProductNotFoundException e) {
+            throw new ProductNotFoundException(errorMessage);
+
+        }
+
+    }
+
+    @Override
+    public ProductDto fetchProductByTitle(String title) {
+            Product product =  productRepository.getProductByTitleIgnoreCase(title);
+
+            System.out.println(product);
+        ProductDto dtoObj = (ProductDto) dtoHandler.dtoClassConverter(product, ProductDto.class);
+        dtoObj.setTags(addTagsToProduct(product));
+
+        return dtoObj;
+    }
+
+
+
+
+    public boolean productWithTagFound(String role, String productTag) {
+        return productTag.toUpperCase().equals(role.toUpperCase());
+    }
+
+
     private Product editBuilderFactory(Product productInDb, ProductDto productDto) {
         if (Helper.notNull(productDto.getTitle())) {
             productInDb.setTitle(productDto.getTitle());
@@ -115,21 +175,10 @@ public class ProductServiceImpl implements ProductService {
         return productInDb;
 
     }
-
-
-    @Override
-    public List<Product> getAllProductsByTitle(String title) {
-
-        try {
-            List<Product> products = productRepository.findAllProductsByTitle(title);
-            return products;
-        } catch (Exception e) {
-            throw new ProductNotFoundException("No product with this name was found ");
-        }
-
-    }
-
 }
+
+
+// Leaving these here as reference to previous implementation of mapper
 //    private Product transferToProduct(ProductDto dto) {
 //        Product entity = modelMapper.map(dto, Product.class);
 //
@@ -139,7 +188,6 @@ public class ProductServiceImpl implements ProductService {
 //        ProductDto dto = modelMapper.map(product, ProductDto.class);
 //        return dto;
 //}
-
 
 
 /// Leaving these here as reference since this was the style of the homework assignments

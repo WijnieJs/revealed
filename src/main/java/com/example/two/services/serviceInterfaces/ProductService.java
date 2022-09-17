@@ -13,5 +13,9 @@ public interface ProductService {
     List<ProductDto> fetchAll();
     ProductDto findProductById(Integer productId);
     ResponseDto editProduct(ProductDto productDto);
-    List<Product> getAllProductsByTitle(String title);
+    List<ProductDto> fetchProductsByTag(String roleName);
+
+
+    ProductDto fetchProductByTitle(String title);
+
 }
