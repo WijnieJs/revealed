@@ -46,7 +46,7 @@ public class TagServiceImpl implements TagService {
 
 
     @Override
-    public Tag getTagInDbById(Integer roleId) {
+    public Tag getTagInDbById(Long  roleId) {
         return null;
     }
 

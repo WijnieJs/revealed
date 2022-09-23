@@ -1,6 +1,6 @@
 package com.example.two.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
@@ -17,7 +17,7 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty
     @Column
-    private Long id;
+    private Long  id;
 
     @ManyToMany
     @JsonProperty
@@ -31,6 +31,10 @@ public class Cart {
     @Column
     @JsonProperty
     private BigDecimal total;
+
+
+    private int quantity;
+
 
     public void setTotal(BigDecimal total) {
         this.total = total;
@@ -52,6 +56,10 @@ public class Cart {
         this.id = id;
     }
 
+    public BigDecimal getTotal() {
+        return total;
+    }
+
     public List<Product> getItems() {
         return items;
     }
@@ -68,6 +76,7 @@ public class Cart {
         if(total == null) {
             total = new BigDecimal(0);
         }
+
         total = total.add(item.getPrice());
     }
 

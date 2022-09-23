@@ -19,7 +19,7 @@ public interface UserService {
     ResponseEntity<JwtResponse> getAuthentication(LoginRequest loginRequest);
 
 
-
+    User getUserByUserId(Long  userId);
     User findByUsername(String username);
 
 

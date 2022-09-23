@@ -6,26 +6,39 @@ import javax.validation.constraints.NotNull;
 
 public class CartItemInputDto {
 
+
     @JsonProperty
     private String username;
 
-    private @NotNull Integer productId;
-    private @NotNull Integer quantity;
+    @JsonProperty
+    private long itemId;
 
+    @JsonProperty
+    private int quantity;
 
-    public Integer getProductId() {
-        return productId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setProductId(Integer productId) {
-        this.productId = productId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public Integer getQuantity() {
+    public long getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(long itemId) {
+        this.itemId = itemId;
+    }
+
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+
 }

@@ -4,6 +4,9 @@ package com.example.two.controllers;
 import com.example.two.dto.ProductDto;
 
 import com.example.two.dto.ResponseDto;
+import com.example.two.exceptions.ApiException;
+import com.example.two.exceptions.ApiRequestException;
+import com.example.two.exceptions.ProductNotFoundException;
 import com.example.two.models.Product;
 import com.example.two.security.response.MessageResponse;
 import com.example.two.services.serviceInterfaces.ProductService;
@@ -41,11 +44,18 @@ public class ProductController {
 
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
-//    System.out.println(result + "IN THE  FFF RESULT");
 
-        ProductDto newProduct = productService.addNewProduct(productDto);
 
-          return ResponseEntity.ok(new MessageResponse("Product " + newProduct.getTitle() + "created successfully!"));
+
+        try {
+                ProductDto newProduct = productService.addNewProduct(productDto);
+
+                return ResponseEntity.ok(new MessageResponse("Product " + newProduct.getTitle() + "created successfully!"));
+
+            } catch(Exception e) {
+                  throw new ProductNotFoundException("Product already exists");
+            }
+
 
     }
     @PatchMapping("/editProduct")
@@ -71,8 +81,8 @@ public class ProductController {
 
 
     @GetMapping("/productById/{id}")
-    public ResponseEntity<ProductDto> getProductById(@PathVariable("id") int id)  {
-        ProductDto product = productService.findProductById(id);
+    public ResponseEntity<ProductDto> getProductById(@PathVariable("id") long id)  {
+        ProductDto product = productService.findProductDtoById(id);
         return new ResponseEntity<>(product, HttpStatus.OK);
 
     }
@@ -96,5 +106,8 @@ public class ProductController {
 
         return ResponseEntity.ok().body(product);
     }
+
+
+
 
 }

@@ -12,7 +12,7 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long  id;
 
 
     @Column(name = "title")
@@ -42,13 +42,11 @@ public class Product {
 //    private Set<Tag> tags = new HashSet<>();
 
 
-
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -120,5 +118,6 @@ public List<Tag> getTags() {
     public String toString() {
         return "Product [id=" + id + ", title=" + title + ", desc=" + description + ", published=" + published + "]";
     }
+
 
 }

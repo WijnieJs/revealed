@@ -11,7 +11,8 @@ public interface ProductService {
 
     ProductDto addNewProduct(ProductDto productDto);
     List<ProductDto> fetchAll();
-    ProductDto findProductById(Integer productId);
+    ProductDto findProductDtoById(Long  productId);
+    Product findInDbProductById(Long  productId);
     ResponseDto editProduct(ProductDto productDto);
     List<ProductDto> fetchProductsByTag(String roleName);
 

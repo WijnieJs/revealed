@@ -4,15 +4,15 @@ import com.example.two.dto.ResponseDto;
 import com.example.two.exceptions.ApiRequestException;
 import com.example.two.exceptions.UserIdException;
 import com.example.two.models.*;
-import com.example.two.repository.ShopRepository;
-import com.example.two.repository.RoleRepository;
-import com.example.two.repository.UserRepository;
+import com.example.two.repository.CartRepository;
+ import com.example.two.repository.UserRepository;
 import com.example.two.security.jwt.JwtUtils;
 import com.example.two.security.request.LoginRequest;
 import com.example.two.security.request.SignupRequest;
 import com.example.two.security.response.JwtResponse;
 import com.example.two.security.services.UserDetailsImpl;
 import com.example.two.security.services.UserDetailsServiceImpl;
+import com.example.two.services.serviceInterfaces.RoleService;
 import com.example.two.services.serviceInterfaces.UserService;
 import com.example.two.utils.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService    {
 
 	@Autowired
 	private final AuthenticationManager authenticationManager;
@@ -38,11 +38,11 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	JwtUtils jwtUtils;
 
-	@Autowired
-	private final RoleRepository roleRepository;
+ 	@Autowired
+	private final RoleService roleService;
 
 	@Autowired
-	private final ShopRepository shopRepository;
+	private final CartRepository cartRepository;
 
 	@Autowired
 	private final PasswordEncoder encoder;
@@ -52,20 +52,16 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private final UserDetailsServiceImpl userDetailsService;
 
-	public UserServiceImpl(AuthenticationManager authenticationManager,
-						   RoleRepository roleRepository,
-						   ShopRepository shopRepository,
-						   PasswordEncoder encoder,
-						   UserRepository userRepository, UserDetailsServiceImpl userDetailsService) {
-
+	public UserServiceImpl(AuthenticationManager authenticationManager, JwtUtils jwtUtils, RoleService roleService, CartRepository cartRepository,
+						   PasswordEncoder encoder, UserRepository userRepository, UserDetailsServiceImpl userDetailsService) {
 		this.authenticationManager = authenticationManager;
-		this.roleRepository = roleRepository;
-		this.shopRepository = shopRepository;
+		this.jwtUtils = jwtUtils;
+		this.roleService = roleService;
+		this.cartRepository = cartRepository;
 		this.encoder = encoder;
 		this.userRepository = userRepository;
 		this.userDetailsService = userDetailsService;
 	}
-
 
 	@Override
 	public ResponseDto register(SignupRequest signUpRequest) {
@@ -79,16 +75,17 @@ public class UserServiceImpl implements UserService {
 				throw new UserIdException(errorMessage);
 			}
 
-
+			errorMessage = "Some role things";
 			User user = new User(signUpRequest.getUsername(),
 					signUpRequest.getEmail(),
 					encoder.encode(signUpRequest.getPassword()));
 
 			Set<String> strRoles = signUpRequest.getRole();
 			user.setRoles(buildFacadeForUserRolesSwitchStatement(strRoles));
+			errorMessage = "Some cart creating things";
 
 			Cart cart = new Cart();
-			shopRepository.save(cart);
+			cartRepository.save(cart);
 			user.setCart(cart);
 
 			userRepository.save(user);
@@ -97,7 +94,6 @@ public class UserServiceImpl implements UserService {
 			throw new UserIdException(errorMessage);
 
 		}
-
 		return new ResponseDto("Successfully created", "think ");
 
 	}
@@ -130,11 +126,16 @@ public class UserServiceImpl implements UserService {
 
 	}
 
+	@Override
+	public User getUserByUserId(Long  userId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new ApiRequestException("Could not find user with id " ));
 
+			return user;
+	}
 
 	@Override
 	public User findByUsername(String username) {
-
 
 			User user = userRepository.findByUsername(username)
 					.orElseThrow(() -> new ApiRequestException("Could not find user with id " ));
@@ -153,23 +154,23 @@ public class UserServiceImpl implements UserService {
 
 		Set<Role> roles = new HashSet<>();
 		if (strRoles == null) {
-			Role userRole = roleRepository.findByName(ERole.ROLE_USER).get();
+			Role userRole = roleService.findByName(ERole.ROLE_USER).get();
 			roles.add(userRole);
 		} else {
 			strRoles.forEach(role -> {
 				switch (role) {
 					case "admin":
-						Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN).get();
+						Role adminRole = roleService.findByName(ERole.ROLE_ADMIN).get();
 						roles.add(adminRole);
 
 						break;
 					case "mod":
-						Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR).get();
+						Role modRole = roleService.findByName(ERole.ROLE_MODERATOR).get();
 						roles.add(modRole);
 
 						break;
 					default:
-						Role userRole = roleRepository.findByName(ERole.ROLE_USER).get();
+						Role userRole = roleService.findByName(ERole.ROLE_USER).get();
 						roles.add(userRole);
 				}
 			});

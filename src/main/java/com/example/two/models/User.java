@@ -21,7 +21,7 @@ import javax.validation.constraints.Size;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long  id;
 
     @NotNull
     @NotBlank(message = "userName required please")
@@ -48,6 +48,9 @@ public class User {
     @JsonIgnore
     private Cart cart;
 
+    public User() {
+    }
+
     public Cart getCart() {
         return cart;
     }
@@ -57,15 +60,6 @@ public class User {
     }
 
 
-    public User() {
-    }
-    // Constructor setup with ID too create starting sql init file with many to many
-    public User(Long id, String username, String email, String password) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.password = password;password = password;
-    }
 
     public User(String username, String email, String password) {
         this.username = username;

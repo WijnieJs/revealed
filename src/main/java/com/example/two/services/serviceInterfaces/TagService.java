@@ -8,7 +8,7 @@ import java.util.List;
 public interface TagService {
 
 //    Tag findTagInDbByName(String tagName);
-Tag getTagInDbById(Integer roleId);
+Tag getTagInDbById(Long  roleId);
     Tag findTagInDbByName(String roleName);
     List<TagDto> getTags();
 

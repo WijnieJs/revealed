@@ -8,6 +8,7 @@ import com.example.two.dto.converters.DtoMapperService;
 import com.example.two.dto.converters.TagToDto;
 import com.example.two.exceptions.ApiRequestException;
 import com.example.two.exceptions.ProductNotFoundException;
+import com.example.two.exceptions.UserIdException;
 import com.example.two.models.Product;
 import com.example.two.repository.ProductRepository;
 import com.example.two.services.serviceInterfaces.TagService;
@@ -70,13 +71,28 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public ProductDto findProductById(Integer id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ApiRequestException("Could not find product with id " + id));
-        ProductDto dtoObj = (ProductDto) dtoHandler.dtoClassConverter(product, ProductDto.class);
-        dtoObj.setTags(addTagsToProduct(product));
+    public ProductDto findProductDtoById(Long   id) {
 
-        return dtoObj;
+        try {
+            Product product = productRepository.findById(id)
+                    .orElseThrow(() ->  new ProductNotFoundException("Product with id " + id + " could not be found"));
+            ProductDto dtoObj = (ProductDto) dtoHandler.dtoClassConverter(product, ProductDto.class);
+            dtoObj.setTags(addTagsToProduct(product));
+
+            return dtoObj;
+        } catch (Exception e) {
+            throw  new ApiRequestException("Something is wrong on the connection. ");
+        }
+
+    }
+
+    @Override
+    public Product findInDbProductById(Long productId) {
+         try {
+             return productRepository.findById(productId).get();
+         } catch (Exception e) {
+             throw new ProductNotFoundException("Product with id " + productId + " could not be found");
+         }
     }
 
     public List<String> addTagsToProduct(Product product) {
@@ -89,6 +105,7 @@ public class ProductServiceImpl implements ProductService {
         // also works, but for readability kept them seperated
 //           productRepository.save((Product) dtoHandler.dtoClassConverter(productDto, Product.class));
         try {
+            findExistingProductByTitle(productDto.getTitle());
             Product newProduct = (Product) dtoHandler.dtoClassConverter(productDto, Product.class);
 
             productRepository.save(newProduct);
@@ -101,7 +118,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ResponseDto editProduct(ProductDto productDto) {
-        int id = productDto.getId();
+        long id = productDto.getId();
         try {
             Product productInDb = productRepository.findById(id)
                     .orElseThrow(() -> new ProductNotFoundException("Product not found"));
@@ -140,14 +157,46 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto fetchProductByTitle(String title) {
-            Product product =  productRepository.getProductByTitleIgnoreCase(title);
+        String errorMessage = "Product not found";
+        try {
 
-            System.out.println(product);
-        ProductDto dtoObj = (ProductDto) dtoHandler.dtoClassConverter(product, ProductDto.class);
-        dtoObj.setTags(addTagsToProduct(product));
+            if (Helper.notNull(productRepository.getProductByTitleIgnoreCase(title))) {
+                Product product =  productRepository.getProductByTitleIgnoreCase(title);
+                ProductDto dtoObj = (ProductDto) dtoHandler.dtoClassConverter(product, ProductDto.class);
+                dtoObj.setTags(addTagsToProduct(product));
 
-        return dtoObj;
+                return dtoObj;
+            } else  {
+                throw new ProductNotFoundException(errorMessage);
+            }
+
+
+
+        } catch (ProductNotFoundException e) {
+            throw new ProductNotFoundException(errorMessage);
+        }
+
     }
+
+        public void findExistingProductByTitle(String title) {
+        String errorMessage = "Product " + title + "exists already";
+        try {
+            if (Helper.notNull(productRepository.getProductByTitleIgnoreCase(title))) {
+                throw new UserIdException(errorMessage);
+            }
+        } catch (Exception e) {
+            throw new ProductNotFoundException(errorMessage);
+        }
+        }
+
+//    public void productNotFound(String title) {
+//        String errorMessage = "Product " + title + "exists already";
+//        try {
+//            Product prodInDb = productRepository.getProductByTitleIgnoreCase(title);
+//        } catch (Exception e) {
+//            throw new ProductNotFoundException(errorMessage);
+//        }
+
 
 
 

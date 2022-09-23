@@ -35,9 +35,6 @@ public class AuthController {
         return "Public Caaaaaontent.";
     }
 
-
-
-
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@Valid @RequestBody SignupRequest signUpRequest, BindingResult result) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
