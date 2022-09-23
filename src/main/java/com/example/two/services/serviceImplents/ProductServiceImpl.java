@@ -104,15 +104,16 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto addNewProduct(ProductDto productDto) {
         // also works, but for readability kept them seperated
 //           productRepository.save((Product) dtoHandler.dtoClassConverter(productDto, Product.class));
+        String errorMessage =  "Something went wrong saving the product";
         try {
+
             findExistingProductByTitle(productDto.getTitle());
             Product newProduct = (Product) dtoHandler.dtoClassConverter(productDto, Product.class);
-
             productRepository.save(newProduct);
 
             return (ProductDto) dtoHandler.dtoClassConverter(newProduct, ProductDto.class);
         } catch (ProductNotFoundException e) {
-            throw new ProductNotFoundException("Something went wrong on the server ");
+            throw new ProductNotFoundException(errorMessage);
         }
     }
 
@@ -179,14 +180,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
         public void findExistingProductByTitle(String title) {
-        String errorMessage = "Product " + title + "exists already";
-        try {
+        String errorMessage = "Product with title: " + title + "exists already";
+
             if (Helper.notNull(productRepository.getProductByTitleIgnoreCase(title))) {
                 throw new UserIdException(errorMessage);
             }
-        } catch (Exception e) {
-            throw new ProductNotFoundException(errorMessage);
-        }
+
         }
 
 //    public void productNotFound(String title) {

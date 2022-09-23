@@ -53,7 +53,7 @@ public class ProductController {
                 return ResponseEntity.ok(new MessageResponse("Product " + newProduct.getTitle() + "created successfully!"));
 
             } catch(Exception e) {
-                  throw new ProductNotFoundException("Product already exists");
+                  throw new ProductNotFoundException(e.getMessage());
             }
 
 
