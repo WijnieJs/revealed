@@ -12,6 +12,7 @@ import com.example.two.security.request.SignupRequest;
 import com.example.two.security.response.JwtResponse;
 import com.example.two.security.services.UserDetailsImpl;
 import com.example.two.security.services.UserDetailsServiceImpl;
+import com.example.two.services.serviceInterfaces.ProductService;
 import com.example.two.services.serviceInterfaces.RoleService;
 import com.example.two.services.serviceInterfaces.UserService;
 import com.example.two.utils.Helper;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -42,6 +44,9 @@ public class UserServiceImpl implements UserService    {
 	private final RoleService roleService;
 
 	@Autowired
+	private final ProductService productService;
+
+	@Autowired
 	private final CartRepository cartRepository;
 
 	@Autowired
@@ -52,11 +57,12 @@ public class UserServiceImpl implements UserService    {
 	@Autowired
 	private final UserDetailsServiceImpl userDetailsService;
 
-	public UserServiceImpl(AuthenticationManager authenticationManager, JwtUtils jwtUtils, RoleService roleService, CartRepository cartRepository,
+	public UserServiceImpl(AuthenticationManager authenticationManager, JwtUtils jwtUtils, RoleService roleService, ProductService productService, CartRepository cartRepository,
 						   PasswordEncoder encoder, UserRepository userRepository, UserDetailsServiceImpl userDetailsService) {
 		this.authenticationManager = authenticationManager;
 		this.jwtUtils = jwtUtils;
 		this.roleService = roleService;
+		this.productService = productService;
 		this.cartRepository = cartRepository;
 		this.encoder = encoder;
 		this.userRepository = userRepository;
@@ -127,6 +133,26 @@ public class UserServiceImpl implements UserService    {
 	}
 
 	@Override
+	public Product addToCart(Long prodId) {
+			long id = 2;
+
+			Product product = productService.findInDbProductById(id);
+			User user = userRepository.findById(prodId).get();
+
+			User updatedUserCart = user;
+
+				System.out.println(user);
+				System.out.println(user + " is already");
+				System.out.println(user.getCart().getItems());
+			System.out.println(product);
+			updatedUserCart.getCart().addItem(product);
+
+				System.out.println(user.getCart().getItems());
+				userRepository.save(updatedUserCart);
+			return product;
+	}
+
+	@Override
 	public User getUserByUserId(Long  userId) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new ApiRequestException("Could not find user with id " ));
@@ -139,10 +165,13 @@ public class UserServiceImpl implements UserService    {
 
 			User user = userRepository.findByUsername(username)
 					.orElseThrow(() -> new ApiRequestException("Could not find user with id " ));
-
 			return user;
 	}
 
+	@Override
+	public List<User> fetchAllUser() {
+		return userRepository.findAll();
+	}
 
 
 	public Set<Role> buildFacadeForUserRolesSwitchStatement(Set<String> strRoles) {

@@ -4,12 +4,11 @@ package com.example.two.controllers;
 import com.example.two.dto.ProductDto;
 
 import com.example.two.dto.ResponseDto;
-import com.example.two.exceptions.ApiException;
-import com.example.two.exceptions.ApiRequestException;
 import com.example.two.exceptions.ProductNotFoundException;
 import com.example.two.models.Product;
 import com.example.two.security.response.MessageResponse;
 import com.example.two.services.serviceInterfaces.ProductService;
+import com.example.two.services.serviceInterfaces.UserService;
 import com.example.two.utils.MapValidationErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,46 +31,34 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
+    @Autowired
+    UserService userService;
+
+
     @GetMapping("/")
     public String allAccess() {
         return
                 "accesing in visitor mode";
     }
-/// set
-
     @PostMapping("/newproduct")
     public ResponseEntity<?> createNewProduct(@Valid  @RequestBody ProductDto productDto, BindingResult result) {
-
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
-
-
-
         try {
                 ProductDto newProduct = productService.addNewProduct(productDto);
-
                 return ResponseEntity.ok(new MessageResponse("Product " + newProduct.getTitle() + "created successfully!"));
-
             } catch(Exception e) {
                   throw new ProductNotFoundException(e.getMessage());
             }
-
-
     }
-    @PatchMapping("/editProduct")
+    @PostMapping("/editProduct")
     public ResponseEntity<?> editProduct(@Valid @RequestBody ProductDto productDto) {
-
         ResponseDto editProduct = productService.editProduct( productDto);
-
         return ResponseEntity.ok(new MessageResponse("Product created successfully!"));
-
-
     }
 
     @GetMapping("/allProductsInShop")
     public ResponseEntity<List<ProductDto>> getAllProducts()  {
-
-
         List<ProductDto> body = productService.fetchAll();
         if (body.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -91,23 +78,23 @@ public class ProductController {
 
     @GetMapping("/getByTag/{tagName}")
     public ResponseEntity<List<ProductDto>> getProductByTag(@PathVariable("tagName") String tagName)  {
-
         List<ProductDto> product = productService.fetchProductsByTag(tagName);
         return ResponseEntity.ok().body(product);
-
     }
 
     @GetMapping("/getByTitle/{title}")
     public ResponseEntity<ProductDto> getProductByTitle(@PathVariable("title") String title)  {
-
-
          ProductDto product = productService.fetchProductByTitle(title);
-
-
         return ResponseEntity.ok().body(product);
     }
 
+        @PostMapping("/addTooCart/{uid}")
+    public MessageResponse addToCart(@PathVariable("uid") Long id)  {
+        Product product = userService.addToCart(id);
 
+      return  new MessageResponse("User Registered Successfully");
+
+    }
 
 
 }

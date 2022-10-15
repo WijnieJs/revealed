@@ -33,8 +33,15 @@ public class Cart {
     private BigDecimal total;
 
 
-    private int quantity;
+    private int amount;
 
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
 
     public void setTotal(BigDecimal total) {
         this.total = total;

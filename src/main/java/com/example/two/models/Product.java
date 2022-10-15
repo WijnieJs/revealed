@@ -42,6 +42,16 @@ public class Product {
 //    private Set<Tag> tags = new HashSet<>();
 
 
+    public Product() {
+    }
+
+    public Product(String title, String description, boolean published, BigDecimal price) {
+        this.title = title;
+        this.description = description;
+        this.published = published;
+        this.price = price;
+    }
+
     public Long getId() {
         return id;
     }

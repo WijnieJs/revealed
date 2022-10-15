@@ -1,5 +1,6 @@
 package com.example.two.services.serviceImplents;
 
+import com.example.two.dto.ProductDto;
 import com.example.two.dto.ResponseDto;
 import com.example.two.exceptions.ApiRequestException;
 import com.example.two.exceptions.ProductNotFoundException;
@@ -35,18 +36,15 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public ResponseDto createNewOrder(String username) {
-
+    public ResponseDto createNewOrder(String username,  List<String> products) {
+        System.out.println(products + "WAT");
+        System.out.println(username + "USSE");
             try {
                 User user = userService.findByUsername(username);
-                Cart cart = user.getCart();
-                List<Product> products = cart.getItems();
-                Order newOrder = new Order();
 
-                newOrder.setItems(cart.getItems().stream().collect(Collectors.toList()));
-                newOrder.setTotal(cart.getTotal());
-                newOrder.setUser(cart.getUser());
-                orderRepository.save(newOrder);
+
+                Order newOrder = new Order();
+//                orderRepository.save(newOrder);
                 return new ResponseDto("success", "Order created");
             } catch (Exception e) {
                 throw new ApiRequestException(e.getMessage());

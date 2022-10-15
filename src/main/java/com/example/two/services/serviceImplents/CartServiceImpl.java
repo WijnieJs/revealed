@@ -15,9 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.two.services.serviceInterfaces.ProductService;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -75,6 +77,8 @@ public class CartServiceImpl implements CartService {
         return new ResponseDto("success", "Product removed from your cart");
 
     }
+
+
 
     public User getUserByName(String username) {
         try {

@@ -16,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -34,6 +35,15 @@ public class AuthController {
     public String allAccess() {
         return "Public Caaaaaontent.";
     }
+
+
+    @GetMapping(value = "/allusers")
+    public List<User> fetchAllUsers() {
+        return  userService.fetchAllUser();
+    }
+
+
+
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@Valid @RequestBody SignupRequest signUpRequest, BindingResult result) {

@@ -3,7 +3,8 @@ package com.example.two.controllers;
 import com.example.two.dto.ProductDto;
 import com.example.two.dto.ResponseDto;
 import com.example.two.dto.inputs.CartItemInputDto;
- import com.example.two.models.User;
+import com.example.two.models.Cart;
+import com.example.two.models.User;
 import com.example.two.security.response.MessageResponse;
 import com.example.two.services.serviceInterfaces.CartService;
 import com.example.two.services.serviceInterfaces.UserService;
@@ -31,6 +32,7 @@ public class CartController {
         System.out.println(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
+
 
 
     @PostMapping("/addToCart")

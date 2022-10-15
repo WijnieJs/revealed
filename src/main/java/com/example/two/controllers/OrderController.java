@@ -25,9 +25,9 @@ public class OrderController {
 
 
     @PostMapping("/purchase/{username}")
-    public ResponseEntity<ResponseDto> submit(@PathVariable String username) {
+    public ResponseEntity<ResponseDto> submit(@PathVariable String username, @RequestBody List<String> products) {
 
-        ResponseDto response = orderService.createNewOrder(username);
+        ResponseDto response = orderService.createNewOrder(username, products);
 
         return ResponseEntity.ok(response);
     }

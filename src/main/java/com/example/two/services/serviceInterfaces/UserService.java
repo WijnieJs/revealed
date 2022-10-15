@@ -1,13 +1,14 @@
 package com.example.two.services.serviceInterfaces;
 
 import com.example.two.dto.ResponseDto;
+import com.example.two.models.Product;
 import com.example.two.models.User;
 import com.example.two.security.request.LoginRequest;
 import com.example.two.security.request.SignupRequest;
 import com.example.two.security.response.JwtResponse;
 import org.springframework.http.ResponseEntity;
 
-
+import java.util.List;
 
 
 //FACADE
@@ -18,9 +19,11 @@ public interface UserService {
     ResponseDto register(SignupRequest signUpRequest);
     ResponseEntity<JwtResponse> getAuthentication(LoginRequest loginRequest);
 
-
+    Product addToCart(Long prodId);
     User getUserByUserId(Long  userId);
     User findByUsername(String username);
+
+    List<User> fetchAllUser();
 
 
 //    Boolean existsByUsername(String username);
