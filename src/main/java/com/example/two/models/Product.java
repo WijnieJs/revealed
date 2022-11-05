@@ -15,6 +15,7 @@ public class Product {
     private Long  id;
 
 
+
     @Column(name = "title")
     private @NotNull String title;
 

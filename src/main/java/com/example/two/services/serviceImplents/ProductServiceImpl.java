@@ -104,6 +104,9 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto addNewProduct(ProductDto productDto) {
         // also works, but for readability kept them seperated
 //           productRepository.save((Product) dtoHandler.dtoClassConverter(productDto, Product.class));
+
+        System.out.println(productDto.getImageURL());
+        System.out.println(productDto.toString());
         String errorMessage =  "Something went wrong saving the product";
         try {
 
@@ -160,7 +163,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto fetchProductByTitle(String title) {
         String errorMessage = "Product not found";
         try {
-
+       
             if (Helper.notNull(productRepository.getProductByTitleIgnoreCase(title))) {
                 Product product =  productRepository.getProductByTitleIgnoreCase(title);
                 ProductDto dtoObj = (ProductDto) dtoHandler.dtoClassConverter(product, ProductDto.class);

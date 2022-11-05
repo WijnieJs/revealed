@@ -15,6 +15,8 @@ public class ProductDto {
     private BigDecimal price;
     private boolean published;
      private  String description;
+    private String imageUrl;
+
 
 
     private List<String> tags;

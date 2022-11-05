@@ -64,13 +64,7 @@ public class Order {
         this.total = total;
     }
 
-    public static Order createFromCart(Cart cart) {
-        Order order = new Order();
-        order.setItems(cart.getItems().stream().collect(Collectors.toList()));
-        order.setTotal(cart.getTotal());
-        order.setUser(cart.getUser());
-        return order;
-    }
+
 
 }
 

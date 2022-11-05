@@ -40,11 +40,16 @@ public class ProductController {
         return
                 "accesing in visitor mode";
     }
+
+
+
     @PostMapping("/newproduct")
     public ResponseEntity<?> createNewProduct(@Valid  @RequestBody ProductDto productDto, BindingResult result) {
-        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
-        if (errorMap != null) return errorMap;
+//        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+//        if (errorMap != null) return errorMap;
+
         try {
+            System.out.println(productDto.getTitle());
                 ProductDto newProduct = productService.addNewProduct(productDto);
                 return ResponseEntity.ok(new MessageResponse("Product " + newProduct.getTitle() + "created successfully!"));
             } catch(Exception e) {
@@ -88,13 +93,7 @@ public class ProductController {
         return ResponseEntity.ok().body(product);
     }
 
-        @PostMapping("/addTooCart/{uid}")
-    public MessageResponse addToCart(@PathVariable("uid") Long id)  {
-        Product product = userService.addToCart(id);
 
-      return  new MessageResponse("User Registered Successfully");
-
-    }
 
 
 }

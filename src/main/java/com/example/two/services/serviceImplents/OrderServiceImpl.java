@@ -1,12 +1,8 @@
 package com.example.two.services.serviceImplents;
 
-import com.example.two.dto.ProductDto;
 import com.example.two.dto.ResponseDto;
 import com.example.two.exceptions.ApiRequestException;
-import com.example.two.exceptions.ProductNotFoundException;
-import com.example.two.models.Cart;
 import com.example.two.models.Order;
-import com.example.two.models.Product;
 import com.example.two.models.User;
 import com.example.two.repository.OrderRepository;
 
@@ -16,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service

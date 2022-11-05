@@ -19,8 +19,7 @@ public interface UserService {
     ResponseDto register(SignupRequest signUpRequest);
     ResponseEntity<JwtResponse> getAuthentication(LoginRequest loginRequest);
 
-    Product addToCart(Long prodId);
-    User getUserByUserId(Long  userId);
+     User getUserByUserId(Long  userId);
     User findByUsername(String username);
 
     List<User> fetchAllUser();

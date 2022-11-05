@@ -4,8 +4,7 @@ import com.example.two.dto.ResponseDto;
 import com.example.two.exceptions.ApiRequestException;
 import com.example.two.exceptions.UserIdException;
 import com.example.two.models.*;
-import com.example.two.repository.CartRepository;
- import com.example.two.repository.UserRepository;
+import com.example.two.repository.UserRepository;
 import com.example.two.security.jwt.JwtUtils;
 import com.example.two.security.request.LoginRequest;
 import com.example.two.security.request.SignupRequest;
@@ -27,7 +26,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,8 +44,7 @@ public class UserServiceImpl implements UserService    {
 	@Autowired
 	private final ProductService productService;
 
-	@Autowired
-	private final CartRepository cartRepository;
+
 
 	@Autowired
 	private final PasswordEncoder encoder;
@@ -57,13 +54,13 @@ public class UserServiceImpl implements UserService    {
 	@Autowired
 	private final UserDetailsServiceImpl userDetailsService;
 
-	public UserServiceImpl(AuthenticationManager authenticationManager, JwtUtils jwtUtils, RoleService roleService, ProductService productService, CartRepository cartRepository,
+	public UserServiceImpl(AuthenticationManager authenticationManager, JwtUtils jwtUtils, RoleService roleService, ProductService productService,
 						   PasswordEncoder encoder, UserRepository userRepository, UserDetailsServiceImpl userDetailsService) {
 		this.authenticationManager = authenticationManager;
 		this.jwtUtils = jwtUtils;
 		this.roleService = roleService;
 		this.productService = productService;
-		this.cartRepository = cartRepository;
+
 		this.encoder = encoder;
 		this.userRepository = userRepository;
 		this.userDetailsService = userDetailsService;
@@ -88,11 +85,9 @@ public class UserServiceImpl implements UserService    {
 
 			Set<String> strRoles = signUpRequest.getRole();
 			user.setRoles(buildFacadeForUserRolesSwitchStatement(strRoles));
-			errorMessage = "Some cart creating things";
 
-			Cart cart = new Cart();
-			cartRepository.save(cart);
-			user.setCart(cart);
+
+
 
 			userRepository.save(user);
 
@@ -132,25 +127,6 @@ public class UserServiceImpl implements UserService    {
 
 	}
 
-	@Override
-	public Product addToCart(Long prodId) {
-			long id = 2;
-
-			Product product = productService.findInDbProductById(id);
-			User user = userRepository.findById(prodId).get();
-
-			User updatedUserCart = user;
-
-				System.out.println(user);
-				System.out.println(user + " is already");
-				System.out.println(user.getCart().getItems());
-			System.out.println(product);
-			updatedUserCart.getCart().addItem(product);
-
-				System.out.println(user.getCart().getItems());
-				userRepository.save(updatedUserCart);
-			return product;
-	}
 
 	@Override
 	public User getUserByUserId(Long  userId) {
