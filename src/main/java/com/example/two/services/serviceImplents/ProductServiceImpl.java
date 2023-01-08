@@ -9,7 +9,9 @@ import com.example.two.dto.converters.TagToDto;
 import com.example.two.exceptions.ApiRequestException;
 import com.example.two.exceptions.ProductNotFoundException;
 import com.example.two.exceptions.UserIdException;
+import com.example.two.models.FileUploadResponse;
 import com.example.two.models.Product;
+import com.example.two.repository.FileUploadRepository;
 import com.example.two.repository.ProductRepository;
 import com.example.two.services.serviceInterfaces.TagService;
 
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -30,12 +33,15 @@ public class ProductServiceImpl implements ProductService {
     private final DtoMapperService dtoHandler;
     private final ProductRepository productRepository;
     private final TagService tagService;
+    private final FileUploadRepository fileUploadRepository;
+
 
     @Autowired
-    public ProductServiceImpl(DtoMapperService dtoMapHandlerr, ProductRepository productRepository, TagService tagService) {
+    public ProductServiceImpl(DtoMapperService dtoMapHandlerr, ProductRepository productRepository, TagService tagService, FileUploadRepository fileUploadRepository) {
         this.dtoHandler = dtoMapHandlerr;
         this.productRepository = productRepository;
         this.tagService = tagService;
+        this.fileUploadRepository = fileUploadRepository;
     }
 
     @Override
@@ -50,7 +56,11 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductNotFoundException("Something is wrong on the connection. ");
         }
     }
+    public List<Product> getProductsAll() {
 
+        return productRepository.findAll();
+
+    }
     public List<ProductDto> getAllProductsToDto() {
         try {
             List<Product> productInDb = productRepository.findAll();
@@ -68,7 +78,25 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductNotFoundException("Something is wrong on the connection. ");
         }
     }
+    public void assignPhotoToStudent(String name, Long studentNumber) {
 
+        Optional<Product> optionalStudent = productRepository.findById(studentNumber);
+
+        Optional<FileUploadResponse> fileUploadResponse = fileUploadRepository.findByFileName(name);
+
+        if (optionalStudent.isPresent() && fileUploadResponse.isPresent()) {
+
+            FileUploadResponse photo = fileUploadResponse.get();
+
+            Product student = optionalStudent.get();
+
+            student.setFile(photo);
+
+            productRepository.save(student);
+
+        }
+
+    }
 
     @Override
     public ProductDto findProductDtoById(Long   id) {
@@ -78,7 +106,13 @@ public class ProductServiceImpl implements ProductService {
                     .orElseThrow(() ->  new ProductNotFoundException("Product with id " + id + " could not be found"));
             ProductDto dtoObj = (ProductDto) dtoHandler.dtoClassConverter(product, ProductDto.class);
             dtoObj.setTags(addTagsToProduct(product));
+            if (Helper.notNull(product.getFile())) {
+                dtoObj.setFile(product.getFile());
+            }
 
+
+
+            System.out.println(product.getFile().getUrl());
             return dtoObj;
         } catch (Exception e) {
             throw  new ApiRequestException("Something is wrong on the connection. ");
@@ -105,8 +139,7 @@ public class ProductServiceImpl implements ProductService {
         // also works, but for readability kept them seperated
 //           productRepository.save((Product) dtoHandler.dtoClassConverter(productDto, Product.class));
 
-        System.out.println(productDto.getImageURL());
-        System.out.println(productDto.toString());
+
         String errorMessage =  "Something went wrong saving the product";
         try {
 
@@ -215,16 +248,10 @@ public class ProductServiceImpl implements ProductService {
         if (Helper.notNull(productDto.getDescription())) {
             productInDb.setDescription(productDto.getDescription());
         }
-        if (Helper.notNull(productDto.getImageURL())) {
-            productInDb.setImageURL(productDto.getImageURL());
-        }
         if (!productDto.isPublished()) {
             productInDb.setPublished(productInDb.isPublished());
         }
-
-
         return productInDb;
-
     }
 }
 

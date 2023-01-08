@@ -27,9 +27,9 @@ INSERT INTO product_tags(product_id, tag_id) VALUES(7 ,3);
 INSERT INTO product_tags(product_id, tag_id) VALUES(8 ,3);
 
 
-INSERT INTO users(id, username, email , password) VALUES(99, 'sqlscript', 'isadmin@ex.com', '$2a$12$vEtG7Tru.6KeZc3jYhhsl.QfxX8MS7OVAprULHF8xmk2UoBC2wd/q');
+INSERT INTO users(id, username, email , password) VALUES(99, 'admin', 'isadmin@ex.com', '$2a$12$t/GdSXYMJYFlMN1omUGq7OER/vk9mMgbakyZKYf8vpfNjjnDANGoug');
 
 
--- INSERT INTO users(id ,username, email, password) VALUES (99,'wijnie', 'admintest@test.com', '$2a$12$vEtG7Tru.6KeZc3jYhhsl.QfxX8MS7OVAprULHF8xmk2UoBC2wd/q')
+INSERT INTO users(id ,username, email, password) VALUES (9,'sales', 'issales@test.com', '$2a$12$O.sBxRCjn5fBoM31RMbbTuITsYj23lcaVgf5iKvkcNwyqIjgHpj8u')
 INSERT INTO user_roles(user_id, role_id) VALUES(99, 3);
-
+INSERT INTO user_roles(user_id, role_id) VALUES(9, 2);

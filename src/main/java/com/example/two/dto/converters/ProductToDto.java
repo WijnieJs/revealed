@@ -24,7 +24,7 @@ public class ProductToDto {
             proDto.setId(productys.getId());
             proDto.setPrice(productys.getPrice());
             proDto.setTitle(productys.getTitle());
-            proDto.setImageURL(productys.getImageURL());
+
             proDto.setDescription(productys.getDescription());
             if (!productys.isPublished()) {
                 proDto.setPublished(proDto.isPublished());

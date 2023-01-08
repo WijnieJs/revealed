@@ -10,11 +10,10 @@ import java.util.List;
 @Table(name = "products")
 public class Product {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long  id;
-
-
 
     @Column(name = "title")
     private @NotNull String title;
@@ -28,8 +27,8 @@ public class Product {
 
     private BigDecimal price;
 
-    @Column(name = "image_url")
-    private  String imageURL;
+    @OneToOne
+    FileUploadResponse file;
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
@@ -51,6 +50,12 @@ public class Product {
         this.description = description;
         this.published = published;
         this.price = price;
+    }
+    public void setFile(FileUploadResponse file) {
+        this.file = file;
+    }
+    public FileUploadResponse getFile() {
+        return file;
     }
 
     public Long getId() {
@@ -85,13 +90,7 @@ public class Product {
         this.price = price;
     }
 
-    public String getImageURL() {
-        return imageURL;
-    }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
-    }
 
     public boolean isPublished() {
         return published;
@@ -129,6 +128,7 @@ public List<Tag> getTags() {
     public String toString() {
         return "Product [id=" + id + ", title=" + title + ", desc=" + description + ", published=" + published + "]";
     }
+
 
 
 }

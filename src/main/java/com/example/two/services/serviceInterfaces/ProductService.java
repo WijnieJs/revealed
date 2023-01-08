@@ -19,4 +19,7 @@ public interface ProductService {
 
     ProductDto fetchProductByTitle(String title);
 
+    void assignPhotoToStudent(String fileName, Long studentNumber);
+
+    List<Product> getProductsAll();
 }

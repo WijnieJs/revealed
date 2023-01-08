@@ -45,30 +45,30 @@ public class ProductControllerTests {
     }
 
 
-//    @Mock
-//    private ProductRepository productRepository;
-//
-//    @MockBean
-//    private ProductService productService;
-//
-//
-//    @Test
-//    public void getAllProducts() throws Exception {
-//        ProductDto product1 = new ProductDto();
-//        ProductDto product2 = new ProductDto();
-//        ProductDto product3 = new ProductDto();
-//
-//
-//        Mockito.when(productService.fetchAllProductsInShop()).thenReturn(Arrays.asList(
-//                new ProductDto(),
-//                new ProductDto(),
-//                product3
-//        ));
-//        mockMvc.perform(
-//                MockMvcRequestBuilders.get("/product")).andExpect(content().json("[{}, {}, {}]"));
-//
-//
-//    }
+    @Mock
+    private ProductRepository productRepository;
+
+    @MockBean
+    private ProductService productService;
+
+
+    @Test
+    public void getAllProducts() throws Exception {
+        ProductDto product1 = new ProductDto();
+        ProductDto product2 = new ProductDto();
+        ProductDto product3 = new ProductDto();
+
+
+        Mockito.when(productService.fetchAll()).thenReturn(Arrays.asList(
+                new ProductDto(),
+                new ProductDto(),
+                product3
+        ));
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/product")).andExpect(content().json("[{}, {}, {}]"));
+
+
+    }
 
 
 }

@@ -1,6 +1,8 @@
 package com.example.two.dto;
 
 
+import com.example.two.models.FileUploadResponse;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
@@ -16,6 +18,7 @@ public class ProductDto {
     private boolean published;
      private  String description;
     private String imageUrl;
+
 
 
 
@@ -39,13 +42,6 @@ public class ProductDto {
         this.published = published;
     }
 
-    public String getImageURL() {
-        return imageURL;
-    }
-
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
-    }
 
     public BigDecimal getPrice() {
         return price;
@@ -80,4 +76,6 @@ public class ProductDto {
     }
 
 
+    public void setFile(FileUploadResponse file) {
+    }
 }
